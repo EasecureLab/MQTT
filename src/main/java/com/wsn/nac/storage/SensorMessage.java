@@ -13,13 +13,13 @@ import java.util.Date;
 public class SensorMessage {
     @Schema(description = "将所有的传感器数据都放在这个类里面保存到数据库中", example = "{'smoke':54}")
     String deviceId;
-    private float leakageCurrent;
-    private float smokeConcentration;
-    private float tempData;
-    private float humData;
-    private float current;
-    private float voltage;
-    private float cumulateDegree;
+    private Float leakageCurrent;
+    private Float smokeConcentration;
+    private Float tempData;
+    private Float humData;
+    private Float current;
+    private Float voltage;
+    private Float cumulateDegree;
     private Date createTime;
 
     public String getDeviceId() {
@@ -30,59 +30,59 @@ public class SensorMessage {
         this.deviceId = deviceId;
     }
 
-    public float getLeakageCurrent() {
+    public Float getLeakageCurrent() {
         return leakageCurrent;
     }
 
-    public void setLeakageCurrent(float leakageCurrent) {
+    public void setLeakageCurrent(Float leakageCurrent) {
         this.leakageCurrent = leakageCurrent;
     }
 
-    public float getSmokeConcentration() {
+    public Float getSmokeConcentration() {
         return smokeConcentration;
     }
 
-    public void setSmokeConcentration(float smokeConcentration) {
+    public void setSmokeConcentration(Float smokeConcentration) {
         this.smokeConcentration = smokeConcentration;
     }
 
-    public float getTempData() {
+    public Float getTempData() {
         return tempData;
     }
 
-    public void setTempData(float tempData) {
+    public void setTempData(Float tempData) {
         this.tempData = tempData;
     }
 
-    public float getHumData() {
+    public Float getHumData() {
         return humData;
     }
 
-    public void setHumData(float humData) {
+    public void setHumData(Float humData) {
         this.humData = humData;
     }
 
-    public float getCurrent() {
+    public Float getCurrent() {
         return current;
     }
 
-    public void setCurrent(float current) {
+    public void setCurrent(Float current) {
         this.current = current;
     }
 
-    public float getVoltage() {
+    public Float getVoltage() {
         return voltage;
     }
 
-    public void setVoltage(float voltage) {
+    public void setVoltage(Float voltage) {
         this.voltage = voltage;
     }
 
-    public float getCumulateDegree() {
+    public Float getCumulateDegree() {
         return cumulateDegree;
     }
 
-    public void setCumulateDegree(float cumulateDegree) {
+    public void setCumulateDegree(Float cumulateDegree) {
         this.cumulateDegree = cumulateDegree;
     }
 
