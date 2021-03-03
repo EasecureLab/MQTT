@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * UTF-8
  * Created by czy  Time : 2021/3/3 10:12
@@ -16,12 +18,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MessageStore {
-    final
-    MongoTemplate mongoTemplate;
 
-    public MessageStore(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
+    @Resource(name="deviceHistory")
+    MongoTemplate mongoTemplate;
 
     public void storeElectricMeter(electricMeter electricMeter){
         mongoTemplate.save(electricMeter,"electricMeter");
