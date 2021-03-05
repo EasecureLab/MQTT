@@ -28,7 +28,6 @@ public class PushService {
         String response = responseEntity.getBody();
         System.out.println(response);
 
-
     }
 
 }

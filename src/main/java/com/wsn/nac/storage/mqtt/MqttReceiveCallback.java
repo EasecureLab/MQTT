@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
  * @version 1.0
  */
 @Component
-public class MqttRecieve implements MqttCallback {
+public class MqttReceiveCallback implements MqttCallback {
     @Autowired
     MessageStore messageStore;
     @Override
@@ -29,6 +29,7 @@ public class MqttRecieve implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         String message=new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
+//        System.out.println(new ObjectMapper().readValue(message, SensorMessage.class).toString());
         messageStore.store(new ObjectMapper().readValue(message, SensorMessage.class));
 //        if ("electricMeter".equals(topic)){
 //            messageStore.storeElectricMeter(new ObjectMapper().readValue(message,electricMeter.class));

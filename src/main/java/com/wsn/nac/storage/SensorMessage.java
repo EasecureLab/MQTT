@@ -93,4 +93,19 @@ public class SensorMessage {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    @Override
+    public String toString() {
+        return "SensorMessage{" +
+                "deviceId='" + deviceId + '\'' +
+                ", leakageCurrent=" + leakageCurrent +
+                ", smokeConcentration=" + smokeConcentration +
+                ", tempData=" + tempData +
+                ", humData=" + humData +
+                ", current=" + current +
+                ", voltage=" + voltage +
+                ", cumulateDegree=" + cumulateDegree +
+                ", createTime=" + createTime +
+                '}';
+    }
 }

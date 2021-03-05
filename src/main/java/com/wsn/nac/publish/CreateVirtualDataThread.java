@@ -1,5 +1,6 @@
 package com.wsn.nac.publish;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wsn.nac.publish.service.PushService;
 import com.wsn.nac.publish.entity.*;
 import com.wsn.nac.publish.service.sensorRead;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-public class CreateVirtualDataThread extends Thread{
+public class CreateVirtualDataThread{
 
     @Autowired
     sensorRead sensorread;
@@ -23,10 +24,9 @@ public class CreateVirtualDataThread extends Thread{
     PushService push;
 
     /**
-     * 定时发送数据，每一分钟各类传感器发送一次
+     * 定时发送数据，每10分钟各类传感器发送一次
      */
     @SneakyThrows
-    @Override
     @Scheduled(fixedDelay = 1000*60*10)
     public void run(){
 
@@ -42,8 +42,8 @@ public class CreateVirtualDataThread extends Thread{
             sm.setCreateTime(new Date());
 
             body.setTopics("smoke");
-            body.setQos(1);
-            body.setPayload(sm.toString());
+            body.setQos(2);
+            body.setPayload(new ObjectMapper().writeValueAsString(sm));
             body.setRetain(false);
             body.setClientid("sendSensorData");
             System.out.println(sm.toString());
@@ -51,7 +51,7 @@ public class CreateVirtualDataThread extends Thread{
             push.pushToBroker(body);
         }
 
-        sleep(5000);
+        Thread.sleep(5000);
         //读取所有的漏电流传感器
         List<sensor> sensorsLeakage = sensorread.readOneSensor("leakage");
         for(sensor se : sensorsLeakage){
@@ -66,15 +66,15 @@ public class CreateVirtualDataThread extends Thread{
             le.setCreateTime(new Date());
 
             body.setTopics("leakage");
-            body.setQos(1);
-            body.setPayload(le.toString());
+            body.setQos(2);
+            body.setPayload(new ObjectMapper().writeValueAsString(le));
             body.setRetain(false);
             body.setClientid("sendSensorData");
             System.out.println(le.toString());
 
             push.pushToBroker(body);
         }
-        sleep(5000);
+        Thread.sleep(5000);
         List<sensor> sensorsTemperature = sensorread.readOneSensor("temperature");
         for(sensor se : sensorsTemperature) {
             Random r = new Random();
@@ -89,15 +89,15 @@ public class CreateVirtualDataThread extends Thread{
             temp.setCreateTime(new Date());
 
             body.setTopics("temperature");
-            body.setQos(1);
-            body.setPayload(temp.toString());
+            body.setQos(2);
+            body.setPayload(new ObjectMapper().writeValueAsString(temp));
             body.setRetain(false);
             body.setClientid("sendSensorData");
             System.out.println(temp.toString());
 
             push.pushToBroker(body);
         }
-        sleep(5000);
+        Thread.sleep(5000);
         List<sensor> sensorsElectricMeter = sensorread.readOneSensor("electricMeter");
         for(sensor se : sensorsElectricMeter) {
             Random r = new Random();
@@ -110,8 +110,8 @@ public class CreateVirtualDataThread extends Thread{
             el.setCreateTime(new Date());
 
             body.setTopics("electricMeter");
-            body.setQos(1);
-            body.setPayload(el.toString());
+            body.setQos(2);
+            body.setPayload(new ObjectMapper().writeValueAsString(el));
             body.setRetain(false);
             body.setClientid("sendSensorData");
             System.out.println(el.toString());
