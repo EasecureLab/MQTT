@@ -1,14 +1,14 @@
-package com.wsn.nac.entity;
+package com.wsn.nac.publish.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
-public class leakage {
+public class smoke {
 
-    @Schema(description = "设备Id, 第一个字符是“l”代表它是漏电传感器，剩下的字符表示它的设备编号", example = "l01")
+    @Schema(description = "设备Id, 第一个字符是“s”代表它是烟雾监测传感器，剩下的字符表示它的设备编号", example = "s01")
     private String deviceId;
-    private float leakageCurrent;
+    private float smokeConcentration;
     private Date createTime;
 
     public String getDeviceId() {
@@ -19,12 +19,12 @@ public class leakage {
         this.deviceId = deviceId;
     }
 
-    public float getLeakageCurrent() {
-        return leakageCurrent;
+    public float getSmokeConcentration() {
+        return smokeConcentration;
     }
 
-    public void setLeakageCurrent(float leakageCurrent) {
-        this.leakageCurrent = leakageCurrent;
+    public void setSmokeConcentration(float smokeConcentration) {
+        this.smokeConcentration = smokeConcentration;
     }
 
     public Date getCreateTime() {
@@ -37,9 +37,9 @@ public class leakage {
 
     @Override
     public String toString() {
-        return "leakage{" +
+        return "smoke{" +
                 "deviceId='" + deviceId + '\'' +
-                ", leakageCurrent=" + leakageCurrent +
+                ", smokeConcentration=" + smokeConcentration +
                 ", createTime=" + createTime +
                 '}';
     }

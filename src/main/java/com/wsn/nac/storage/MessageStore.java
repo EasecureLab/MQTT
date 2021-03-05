@@ -1,10 +1,9 @@
 package com.wsn.nac.storage;
 
-import com.wsn.nac.entity.electricMeter;
-import com.wsn.nac.entity.leakage;
-import com.wsn.nac.entity.smoke;
-import com.wsn.nac.entity.temperature;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.wsn.nac.publish.entity.electricMeter;
+import com.wsn.nac.publish.entity.leakage;
+import com.wsn.nac.publish.entity.smoke;
+import com.wsn.nac.publish.entity.temperature;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
