@@ -10,7 +10,7 @@ public class temperature {
     private String deviceId;
     private float tempData;
     private float humData;
-    private Date createTime;
+    private Date dateTime;
 
     public String getDeviceId() {
         return deviceId;
@@ -36,21 +36,21 @@ public class temperature {
         this.humData = humData;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
     public String toString() {
         return "temperature{" +
                 "deviceId='" + deviceId + '\'' +
-                ", tempData='" + tempData + '\'' +
-                ", humData='" + humData + '\'' +
-                ", createTime=" + createTime +
+                ", tempData=" + tempData +
+                ", humData=" + humData +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

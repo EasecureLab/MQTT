@@ -9,7 +9,7 @@ public class leakage {
     @Schema(description = "设备Id, 第一个字符是“l”代表它是漏电传感器，剩下的字符表示它的设备编号", example = "l01")
     private String deviceId;
     private float leakageCurrent;
-    private Date createTime;
+    private Date dateTime;
 
     public String getDeviceId() {
         return deviceId;
@@ -27,12 +27,12 @@ public class leakage {
         this.leakageCurrent = leakageCurrent;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class leakage {
         return "leakage{" +
                 "deviceId='" + deviceId + '\'' +
                 ", leakageCurrent=" + leakageCurrent +
-                ", createTime=" + createTime +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

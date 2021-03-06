@@ -20,7 +20,7 @@ public class SensorMessage {
     private Float current;
     private Float voltage;
     private Float cumulateDegree;
-    private Date createTime;
+    private Date dateTime;
 
     public String getDeviceId() {
         return deviceId;
@@ -86,12 +86,12 @@ public class SensorMessage {
         this.cumulateDegree = cumulateDegree;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class SensorMessage {
                 ", current=" + current +
                 ", voltage=" + voltage +
                 ", cumulateDegree=" + cumulateDegree +
-                ", createTime=" + createTime +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

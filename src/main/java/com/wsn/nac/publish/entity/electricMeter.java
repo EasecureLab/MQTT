@@ -11,7 +11,7 @@ public class electricMeter {
     private float current;
     private float voltage;
     private float cumulateDegree;
-    private Date createTime;
+    private Date dateTime;
 
     public String getDeviceId() {
         return deviceId;
@@ -45,22 +45,22 @@ public class electricMeter {
         this.cumulateDegree = cumulateDegree;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
     public String toString() {
-        return "smartMeter{" +
+        return "electricMeter{" +
                 "deviceId='" + deviceId + '\'' +
                 ", current=" + current +
                 ", voltage=" + voltage +
                 ", cumulateDegree=" + cumulateDegree +
-                ", createTime=" + createTime +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

@@ -27,7 +27,7 @@ public class CreateVirtualDataThread{
      * 定时发送数据，每10分钟各类传感器发送一次
      */
     @SneakyThrows
-    @Scheduled(fixedDelay = 1000*60*10)
+    @Scheduled(fixedDelay = 1000*60)
     public void run(){
 
         //读取所有的烟雾传感器
@@ -39,7 +39,7 @@ public class CreateVirtualDataThread{
             DecimalFormat format = new DecimalFormat("#0.##");
             sm.setSmokeConcentration(Float.parseFloat(format.format(r.nextFloat() * 100)));
             sm.setDeviceId(se.getDeviceId());
-            sm.setCreateTime(new Date());
+            sm.setDateTime(new Date());
 
             body.setTopics("smoke");
             body.setQos(2);
@@ -63,7 +63,7 @@ public class CreateVirtualDataThread{
             DecimalFormat format = new DecimalFormat("#0.##");
             le.setLeakageCurrent(Float.parseFloat(format.format(r.nextFloat())));
             le.setDeviceId(se.getDeviceId());
-            le.setCreateTime(new Date());
+            le.setDateTime(new Date());
 
             body.setTopics("leakage");
             body.setQos(2);
@@ -86,7 +86,7 @@ public class CreateVirtualDataThread{
             //湿度的单位是%
             temp.setHumData(Float.parseFloat(format.format(r.nextFloat()*100)));
             temp.setDeviceId(se.getDeviceId());
-            temp.setCreateTime(new Date());
+            temp.setDateTime(new Date());
 
             body.setTopics("temperature");
             body.setQos(2);
@@ -107,7 +107,7 @@ public class CreateVirtualDataThread{
             el.setVoltage(220);
             el.setCumulateDegree(r.nextFloat() * 100);
             el.setDeviceId(se.getDeviceId());
-            el.setCreateTime(new Date());
+            el.setDateTime(new Date());
 
             body.setTopics("electricMeter");
             body.setQos(2);

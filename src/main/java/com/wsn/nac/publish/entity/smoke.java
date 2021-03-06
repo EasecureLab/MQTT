@@ -9,7 +9,7 @@ public class smoke {
     @Schema(description = "设备Id, 第一个字符是“s”代表它是烟雾监测传感器，剩下的字符表示它的设备编号", example = "s01")
     private String deviceId;
     private float smokeConcentration;
-    private Date createTime;
+    private Date dateTime;
 
     public String getDeviceId() {
         return deviceId;
@@ -27,12 +27,12 @@ public class smoke {
         this.smokeConcentration = smokeConcentration;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class smoke {
         return "smoke{" +
                 "deviceId='" + deviceId + '\'' +
                 ", smokeConcentration=" + smokeConcentration +
-                ", createTime=" + createTime +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }
