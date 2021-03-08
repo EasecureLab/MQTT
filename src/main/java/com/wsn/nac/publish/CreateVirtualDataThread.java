@@ -47,12 +47,11 @@ public class CreateVirtualDataThread{
             body.setPayload(new ObjectMapper().writeValueAsString(sm));
             body.setRetain(false);
             body.setClientid("sendSensorData");
-            System.out.println(sm.toString());
-
+//            System.out.println(sm.toString());
+            Thread.sleep(500);
             push.pushToBroker(body);
         }
 
-        Thread.sleep(5000);
         //读取所有的漏电流传感器
         List<sensor> sensorsLeakage = sensorread.readOneSensor("leakage");
         for(sensor se : sensorsLeakage){
@@ -72,11 +71,11 @@ public class CreateVirtualDataThread{
             body.setPayload(new ObjectMapper().writeValueAsString(le));
             body.setRetain(false);
             body.setClientid("sendSensorData");
-            System.out.println(le.toString());
-
+//            System.out.println(le.toString());
+            Thread.sleep(500);
             push.pushToBroker(body);
         }
-        Thread.sleep(5000);
+
         List<sensor> sensorsTemperature = sensorread.readOneSensor("temperature");
         for(sensor se : sensorsTemperature) {
             Random r = new Random();
@@ -96,11 +95,11 @@ public class CreateVirtualDataThread{
             body.setPayload(new ObjectMapper().writeValueAsString(temp));
             body.setRetain(false);
             body.setClientid("sendSensorData");
-            System.out.println(temp.toString());
-
+//            System.out.println(temp.toString());
+            Thread.sleep(500);
             push.pushToBroker(body);
         }
-        Thread.sleep(5000);
+
         List<sensor> sensorsElectricMeter = sensorread.readOneSensor("electricMeter");
         for(sensor se : sensorsElectricMeter) {
             Random r = new Random();
@@ -118,8 +117,8 @@ public class CreateVirtualDataThread{
             body.setPayload(new ObjectMapper().writeValueAsString(el));
             body.setRetain(false);
             body.setClientid("sendSensorData");
-            System.out.println(el.toString());
-
+//            System.out.println(el.toString());
+            Thread.sleep(500);
             push.pushToBroker(body);
         }
 
