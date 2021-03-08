@@ -1,6 +1,7 @@
 package com.wsn.nac.storage;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -11,6 +12,8 @@ import java.util.Date;
  * @version 1.0
  */
 public class SensorMessage {
+    @Id
+    private String id;
     @Schema(description = "将所有的传感器数据都放在这个类里面保存到数据库中", example = "{'smoke':54}")
     String deviceId;
     private Float leakageCurrent;
@@ -21,6 +24,14 @@ public class SensorMessage {
     private Float voltage;
     private Float cumulateDegree;
     private Date dateTime;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDeviceId() {
         return deviceId;

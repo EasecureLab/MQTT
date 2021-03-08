@@ -29,8 +29,9 @@ public class MqttReceiveCallback implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         String message=new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
+        SensorMessage sensorMessage = new ObjectMapper().readValue(message, SensorMessage.class);
 //        System.out.println(new ObjectMapper().readValue(message, SensorMessage.class).toString());
-        messageStore.store(new ObjectMapper().readValue(message, SensorMessage.class));
+        messageStore.storeByCollectionId(sensorMessage,sensorMessage.getId());
 //        if ("electricMeter".equals(topic)){
 //            messageStore.storeElectricMeter(new ObjectMapper().readValue(message,electricMeter.class));
 //        }else if ("leakage".equals(topic)){

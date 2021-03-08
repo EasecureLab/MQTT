@@ -26,8 +26,7 @@ public class PushService {
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url,entity,String.class);
         String response = responseEntity.getBody();
-        System.out.println(response);
-
+//        System.out.println(response);
     }
 
 }

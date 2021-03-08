@@ -36,7 +36,7 @@ public class MessageStore {
     public void storeSmoke(smoke readValue) {
         mongoTemplate.save(readValue,"smoke");
     }
-    public void store(SensorMessage message) {
-        mongoTemplate.save(message,"sensor");
+    public void storeByCollectionId(SensorMessage message,String collectionId) {
+        mongoTemplate.save(message,collectionId);
     }
 }
