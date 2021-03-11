@@ -76,7 +76,7 @@ public class MongoDBConfig {
 
     @Bean("deviceHistory")
     public MongoTemplate mongoTemplateForDeviceHistory() {
-        return getMongoTemplateByDatabaseName("easecurelab_deviceHistory");
+        return getMongoTemplateByDatabaseName("mqtt_history");
     }
 
     private MongoTemplate getMongoTemplateByDatabaseName(String databaseName) {
