@@ -22,7 +22,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
     MqttReceiveCallback mqttReceive;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args)  {
         String HOST = "tcp://121.4.39.153:1883";
         String[] TOPICS = {"electricMeter","leakage","smoke","temperature"};
         int[] qos = {2,2,2,2};
@@ -31,6 +31,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
         String passWord = "wsn405407";
         MqttClient client = null;
         try {
+            System.out.println("连接成功！");
             // host为主机名，test为clientid即连接MQTT的客户端ID，一般以客户端唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
             client = new MqttClient(HOST, clientId, new MemoryPersistence());
             // MQTT的连接设置

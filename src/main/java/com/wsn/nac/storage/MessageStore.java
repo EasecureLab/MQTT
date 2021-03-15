@@ -39,4 +39,5 @@ public class MessageStore {
     public void storeByCollectionId(SensorMessage message,String collectionId) {
         mongoTemplate.save(message,collectionId);
     }
+    public void readDegree(){}
 }
