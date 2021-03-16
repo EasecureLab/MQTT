@@ -1,12 +1,11 @@
 package com.wsn.nac.publish;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wsn.nac.Util.SpringContextUtil;
 import com.wsn.nac.publish.service.PushService;
 import com.wsn.nac.publish.entity.*;
 import com.wsn.nac.publish.service.sensorRead;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -15,18 +14,13 @@ import java.util.Random;
 import java.util.TimerTask;
 
 @Component
+@RequiredArgsConstructor
 public class CreateVirtualDataTask extends TimerTask {
 
-    @Autowired
-    sensorRead sensorread;
+    final private sensorRead sensorread;
+    final private PushService push;
 
-    @Autowired
-    PushService push;
 
-    public CreateVirtualDataTask() {//从bean工厂里拿个实例
-	    this.sensorread = SpringContextUtil.getBean(sensorRead.class);
-	    this.push = SpringContextUtil.getBean(PushService.class);
-	}
 
     /**
      * 定时发送数据，每半分钟各类传感器发送一次

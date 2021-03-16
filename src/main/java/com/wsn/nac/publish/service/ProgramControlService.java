@@ -1,15 +1,20 @@
 package com.wsn.nac.publish.service;
 
 import com.wsn.nac.publish.CreateVirtualDataTask;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Timer;
 
 @Service
+@RequiredArgsConstructor
 public class ProgramControlService {
 
     Timer timer = new Timer();
-    CreateVirtualDataTask task = new CreateVirtualDataTask();
+
+
+    final private CreateVirtualDataTask task;
 
     //设置默认情况下开启定时器，默认每1分钟产生数据
     public void startProgram(){
