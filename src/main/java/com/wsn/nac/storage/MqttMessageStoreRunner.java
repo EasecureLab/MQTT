@@ -27,15 +27,15 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
         String[] TOPICS = {"electricMeter","leakage","smoke","temperature"};
         int[] qos = {2,2,2,2};
         String clientId = "javaClient";
-        String userName = "admin";
+        String userName = "wsn";
         String passWord = "wsn405407";
         MqttClient client = null;
         try {
-            System.out.println("连接成功！");
             // host为主机名，test为clientid即连接MQTT的客户端ID，一般以客户端唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
             client = new MqttClient(HOST, clientId, new MemoryPersistence());
             // MQTT的连接设置
             MqttConnectOptions options = new MqttConnectOptions();
+            System.out.println("连接成功！");
             // 设置是否清空session,这里如果设置为false表示服务器会保留客户端的连接记录，这里设置为true表示每次连接到服务器都以新的身份连接
             options.setCleanSession(true);
             // 设置连接的用户名

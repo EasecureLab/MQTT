@@ -2,6 +2,7 @@ package com.wsn.nac.publish.service;
 
 
 import com.wsn.nac.publish.entity.pushBody;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PushService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+
+    final private RestTemplate restTemplate;
 
     public void pushToBroker(pushBody body){
 

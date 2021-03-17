@@ -6,6 +6,7 @@ import com.wsn.nac.publish.entity.*;
 import com.wsn.nac.publish.service.sensorRead;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Random;
 import java.util.TimerTask;
 
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CreateVirtualDataTask extends TimerTask {
 
     final private sensorRead sensorread;
