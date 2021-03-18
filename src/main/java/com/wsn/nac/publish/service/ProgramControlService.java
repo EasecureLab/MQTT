@@ -2,14 +2,13 @@ package com.wsn.nac.publish.service;
 
 import com.wsn.nac.publish.CreateVirtualDataTask;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Timer;
-
-@Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+/**
+//@Service
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProgramControlService {
 
     Timer timer = new Timer();
@@ -42,3 +41,4 @@ public class ProgramControlService {
 
 
 }
+*/

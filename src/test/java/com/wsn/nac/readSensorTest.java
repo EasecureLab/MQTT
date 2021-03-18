@@ -1,7 +1,6 @@
 package com.wsn.nac;
 
 import com.wsn.nac.publish.entity.sensor;
-import com.wsn.nac.publish.service.ProgramControlService;
 import com.wsn.nac.publish.service.sensorRead;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +17,6 @@ public class readSensorTest {
     @Autowired
     sensorRead sensorread;
 
-    @Autowired
-    ProgramControlService programControl;
-
 
     @Test
     public void readTest(){
@@ -28,10 +24,6 @@ public class readSensorTest {
         System.out.println(sensors);
     }
 
-    @Test
-    public void testStartProgram(){
-        programControl.setParam(5);
-    }
 
 
 }

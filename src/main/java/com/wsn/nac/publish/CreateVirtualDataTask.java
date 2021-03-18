@@ -6,7 +6,10 @@ import com.wsn.nac.publish.entity.*;
 import com.wsn.nac.publish.service.sensorRead;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -16,7 +19,7 @@ import java.util.TimerTask;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CreateVirtualDataTask extends TimerTask {
+public class CreateVirtualDataTask extends QuartzJobBean {
 
     final private sensorRead sensorread;
     final private PushService push;
@@ -29,7 +32,8 @@ public class CreateVirtualDataTask extends TimerTask {
     //@Scheduled(fixedDelay = 1000*30)
     @SneakyThrows
     @Override
-    public void run(){
+    public void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+
 
         //读取所有的烟雾传感器
         System.out.println("开始生成数据");

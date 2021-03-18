@@ -1,9 +1,11 @@
 package com.wsn.nac.publish.controller;
 
-import com.wsn.nac.publish.service.ProgramControlService;
+import com.wsn.nac.publish.service.UseQuartZControlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,26 +15,39 @@ import org.springframework.web.bind.annotation.*;
 public class StartProgramController {
 
 
-     final private ProgramControlService programControlService;
+     final private UseQuartZControlService usequartZ;
+     final private Scheduler scheduler;
 
     @ApiOperation(value = "controlStart")
     @GetMapping("/start")
-    public void startProgram(){
-        programControlService.startProgram();
+    public void startProgram() throws SchedulerException {
+        usequartZ.createScheduleJob(scheduler);
     }
 
 
     @ApiOperation(value = "PostFrequencyParam")
     @PostMapping("/frequency")
     public void changeFrequency(
-            @RequestParam(name = "frequencyParam") long frequencyParam){
-        programControlService.setParam(frequencyParam);
+            @RequestParam(name = "frequencyParam") int frequencyParam) throws SchedulerException {
+        usequartZ.setParam(scheduler,frequencyParam);
     }
 
 
     @ApiOperation(value = "controlStop")
     @GetMapping("/end")
     public void endProgram(){
-        programControlService.stopProgram();
+        usequartZ.deleteScheduleJob(scheduler);
+    }
+
+    @ApiOperation(value = "controlPause")
+    @GetMapping("/pause")
+    public void pauseProgram(){
+        usequartZ.pauseScheduleJob(scheduler);
+    }
+
+    @ApiOperation(value = "controlResume")
+    @GetMapping("/resume")
+    public void resumeProgram(){
+        usequartZ.resumeScheduleJob(scheduler);
     }
 }
