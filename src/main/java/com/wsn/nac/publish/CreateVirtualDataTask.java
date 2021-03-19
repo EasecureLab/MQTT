@@ -32,12 +32,12 @@ public class CreateVirtualDataTask extends QuartzJobBean {
     //@Scheduled(fixedDelay = 1000*30)
     @SneakyThrows
     @Override
-    public void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void executeInternal(JobExecutionContext jobExecutionContext)  {
 
 
         //读取所有的烟雾传感器
         System.out.println("开始生成数据");
-        List<sensor> sensorsSmoke = sensorread.readOneSensor("smoke");
+        List<sensor> sensorsSmoke = sensorread.readOneSensor("SMOKE");
         if(sensorsSmoke != null){
             for (sensor se : sensorsSmoke) {
                 Random r = new Random();
@@ -62,7 +62,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
 
 
         //读取所有的漏电流传感器
-        List<sensor> sensorsLeakage = sensorread.readOneSensor("leakage");
+        List<sensor> sensorsLeakage = sensorread.readOneSensor("LEAKAGE");
         if(sensorsLeakage != null){
             for(sensor se : sensorsLeakage){
                 Random r = new Random();
@@ -88,7 +88,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
         }
 
 
-        List<sensor> sensorsTemperature = sensorread.readOneSensor("temperature");
+        List<sensor> sensorsTemperature = sensorread.readOneSensor("TEMPERATURE");
         if(sensorsTemperature != null){
             for(sensor se : sensorsTemperature) {
                 Random r = new Random();
@@ -115,7 +115,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
         }
 
 
-        List<sensor> sensorsElectricMeter = sensorread.readOneSensor("electricMeter");
+        List<sensor> sensorsElectricMeter = sensorread.readOneSensor("ELECTRICMETER");
         if(sensorsElectricMeter != null){
             for(sensor se : sensorsElectricMeter) {
                 Random r = new Random();

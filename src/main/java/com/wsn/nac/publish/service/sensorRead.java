@@ -18,10 +18,10 @@ public class sensorRead {
 
     /**
      * 从“sensor”集合中根据传感器名字查询所有对应的传感器
-     * @param name
+     * @param type 传感器类型
     */
-    public List<sensor> readOneSensor(String name){
+    public List<sensor> readOneSensor(String type){
         return mongoTemplateService.
-                find(new Query(Criteria.where("name").is(name)), sensor.class, "sensor");
+                find(new Query(Criteria.where("sensorType").is(type)), sensor.class, "sensor");
     }
 }
