@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: NacApplication
   data:
     mongodb:
       authentication-database: admin
@@ -6,6 +8,8 @@ spring:
       password: scuiot2333
       host: 121.4.39.153
       port: 27017
+
+
 swagger:
   title: SensorController API
   description: "Control the rate, start and end of sensor data generation!"

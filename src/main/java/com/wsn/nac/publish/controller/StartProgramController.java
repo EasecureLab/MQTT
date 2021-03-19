@@ -3,6 +3,7 @@ package com.wsn.nac.publish.controller;
 import com.wsn.nac.publish.service.UseQuartZControlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -50,4 +51,11 @@ public class StartProgramController {
     public void resumeProgram(){
         usequartZ.resumeScheduleJob(scheduler);
     }
+
+    @GetMapping("/check")
+    @Operation(summary = "这是一个测试连接, 如果有输出,则说明服务正在运行")
+    public String test() {
+        return "这是一个测试连接, 如果有输出,则说明服务正在运行";
+    }
+
 }
