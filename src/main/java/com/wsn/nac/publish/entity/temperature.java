@@ -15,6 +15,7 @@ public class temperature {
     private float tempData;
     private float humData;
     private Date dateTime;
+    private String sensorType;
 
     public String getId() {
         return id;
@@ -54,6 +55,14 @@ public class temperature {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getSensorType() {
+        return sensorType;
+    }
+
+    public void setSensorType(String sensorType) {
+        this.sensorType = sensorType;
     }
 
     @Override

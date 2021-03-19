@@ -15,6 +15,7 @@ public class electricMeter {
     private float voltage;
     private float cumulateDegree;
     private Date dateTime;
+    private String sensorType;
 
     public String getId() {
         return id;
@@ -62,6 +63,14 @@ public class electricMeter {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getSensorType() {
+        return sensorType;
+    }
+
+    public void setSensorType(String sensorType) {
+        this.sensorType = sensorType;
     }
 
     @Override

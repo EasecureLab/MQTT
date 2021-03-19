@@ -30,7 +30,7 @@ public class MqttReceiveCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         String message=new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
         SensorMessage sensorMessage = new ObjectMapper().readValue(message, SensorMessage.class);
-        String collectionId = sensorMessage.getId();
+        String collectionId = sensorMessage.getDeviceId();
         sensorMessage.setId("");
 //        System.out.println(new ObjectMapper().readValue(message, SensorMessage.class).toString());
         messageStore.storeByCollectionId(sensorMessage,collectionId);

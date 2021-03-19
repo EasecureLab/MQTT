@@ -9,6 +9,7 @@ public class sensor {
     private String name;
     private String deviceId;
     private String roomId;
+    private String sensorType;
 
     public String getId() {
         return id;
@@ -40,6 +41,14 @@ public class sensor {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public String getSensorType() {
+        return sensorType;
+    }
+
+    public void setSensorType(String sensorType) {
+        this.sensorType = sensorType;
     }
 
     @Override

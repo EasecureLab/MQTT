@@ -35,7 +35,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
             client = new MqttClient(HOST, clientId, new MemoryPersistence());
             // MQTT的连接设置
             MqttConnectOptions options = new MqttConnectOptions();
-            System.out.println("连接成功！");
+
             // 设置是否清空session,这里如果设置为false表示服务器会保留客户端的连接记录，这里设置为true表示每次连接到服务器都以新的身份连接
             options.setCleanSession(true);
             // 设置连接的用户名
@@ -49,6 +49,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
             // 设置回调函数
             client.setCallback(mqttReceive);
             client.connect(options);
+            System.out.println("连接成功！");
             //订阅消息
             client.subscribe(TOPICS,qos);
         } catch (Exception e) {
