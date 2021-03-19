@@ -47,7 +47,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
                 sm.setSmokeConcentration(Float.parseFloat(format.format(r.nextFloat() * 100)));
                 sm.setDeviceId(se.getDeviceId());
                 sm.setDateTime(new Date());
-                sm.setId(se.getId());
+                sm.setSensorType(se.getSensorType());
 
                 body.setTopics("smoke");
                 body.setQos(2);
@@ -74,7 +74,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
                 le.setLeakageCurrent(Float.parseFloat(format.format(r.nextFloat())));
                 le.setDeviceId(se.getDeviceId());
                 le.setDateTime(new Date());
-                le.setId(se.getId());
+                le.setSensorType(se.getSensorType());
 
                 body.setTopics("leakage");
                 body.setQos(2);
@@ -101,7 +101,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
                 temp.setHumData(Float.parseFloat(format.format(r.nextFloat()*100)));
                 temp.setDeviceId(se.getDeviceId());
                 temp.setDateTime(new Date());
-                temp.setId(se.getId());
+                temp.setSensorType(se.getSensorType());
 
                 body.setTopics("temperature");
                 body.setQos(2);
@@ -127,7 +127,7 @@ public class CreateVirtualDataTask extends QuartzJobBean {
                 el.setCumulateDegree(Float.parseFloat(format.format(r.nextFloat() * 100)));
                 el.setDeviceId(se.getDeviceId());
                 el.setDateTime(new Date());
-                el.setId(se.getId());
+                el.setSensorType(se.getSensorType());
 
                 body.setTopics("electricMeter");
                 body.setQos(2);

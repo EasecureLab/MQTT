@@ -43,7 +43,7 @@ public class MqttReceiveCallback implements MqttCallback {
 //        }else if ("smoke".equals(topic)){
 //            messageStore.storeSmoke(new ObjectMapper().readValue(message, smoke.class));
 //        }
-        System.out.println("messageArrived() topic: "+topic+", message is "+new String(mqttMessage.getPayload(), StandardCharsets.UTF_8));
+        System.out.println("messageArrived() topic: "+topic+", message is "+message);
 
     }
 
