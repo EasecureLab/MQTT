@@ -1,5 +1,6 @@
 package com.wsn.nac.config;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -27,6 +28,7 @@ public class MongoDBConfig {
     private String host;
     private String port;
     private String authenticationDatabase;
+    private String maxConnectionIdleTime;
 
     public String getUsername() {
         return username;
@@ -68,6 +70,14 @@ public class MongoDBConfig {
         this.authenticationDatabase = authenticationDatabase;
     }
 
+    public String getMaxConnectionIdleTime() {
+        return maxConnectionIdleTime;
+    }
+
+    public void setMaxConnectionIdleTime(String maxConnectionIdleTime) {
+        this.maxConnectionIdleTime = maxConnectionIdleTime;
+    }
+
     @Bean("device")
     @Primary
     public MongoTemplate mongoTemplateForDevice() {
@@ -80,12 +90,9 @@ public class MongoDBConfig {
     }
 
     private MongoTemplate getMongoTemplateByDatabaseName(String databaseName) {
-        MongoCredential mongoCredential = MongoCredential.createCredential(username, authenticationDatabase,
-                password.toCharArray());
-        ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
-        MongoClientSettings mongoClientSettings = MongoClientSettings.builder().applyToClusterSettings(builder -> {
-            builder.hosts(Collections.singletonList(serverAddress));
-        }).credential(mongoCredential).build();
-        return new MongoTemplate(MongoClients.create(mongoClientSettings),databaseName);
+        String connectionString = "mongodb://"+username+":"+password+"@"+host+":"+port+"/"
+                +authenticationDatabase+"?"+"maxidletimems="+maxConnectionIdleTime;
+
+        return new MongoTemplate(MongoClients.create(connectionString),databaseName);
     }
 }
