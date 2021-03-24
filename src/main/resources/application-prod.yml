@@ -24,3 +24,8 @@ spring:
         health-check-path: /check
         heartbeat:
           enabled: true
+logging:
+  file:
+    path: /etc/log
+    name: mqtt.log
+

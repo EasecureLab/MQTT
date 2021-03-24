@@ -22,7 +22,7 @@ public class UseQuartZControlService {
 
         // 构建触发器trigger,设置定时一分钟重复执行
         SimpleTrigger trigger = TriggerBuilder.newTrigger().startNow().withIdentity("sensorData")
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(1).repeatForever()).build();
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(10).repeatForever()).build();
 
         //调度器，开始运行任务
         scheduler.scheduleJob(jobDetail,trigger);
