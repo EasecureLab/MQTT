@@ -43,6 +43,8 @@ public class MqttReceiveCallback implements MqttCallback {
 //        }else if ("smoke".equals(topic)){
 //            messageStore.storeSmoke(new ObjectMapper().readValue(message, smoke.class));
 //        }
+        // System.out.println(collectionId);
+        System.out.println("订阅的消息内容：");
         System.out.println("messageArrived() topic: "+topic+", message is "+message);
 
     }

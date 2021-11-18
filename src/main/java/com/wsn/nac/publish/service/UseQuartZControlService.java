@@ -13,7 +13,7 @@ public class UseQuartZControlService {
     final private CreateVirtualDataTask jobBean;
 
     /**
-     * 创建并开始运行一个定时任务,默认每一分钟产生一次数据
+     * 创建并开始运行一个定时任务,默认10秒钟产生一次数据
      * @param scheduler  调度器
      */
     public  void createScheduleJob(Scheduler scheduler) throws SchedulerException {
@@ -22,7 +22,7 @@ public class UseQuartZControlService {
 
         // 构建触发器trigger,设置定时一分钟重复执行
         SimpleTrigger trigger = TriggerBuilder.newTrigger().startNow().withIdentity("sensorData")
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(10).repeatForever()).build();
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever()).build();
 
         //调度器，开始运行任务
         scheduler.scheduleJob(jobDetail,trigger);
@@ -36,6 +36,7 @@ public class UseQuartZControlService {
     public void pauseScheduleJob(Scheduler scheduler){
         JobKey jobKey = JobKey.jobKey("sensorData");
         try {
+
             scheduler.pauseJob(jobKey);
             System.out.println("暂停数据的产生");
         } catch (SchedulerException e) {

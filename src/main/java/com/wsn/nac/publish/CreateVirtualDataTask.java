@@ -1,142 +1,97 @@
 package com.wsn.nac.publish;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wsn.nac.publish.UDP.Highway1Client;
+import com.wsn.nac.publish.UDP.Highway1Support;
+import com.wsn.nac.publish.UDP.UDPSupport;
 import com.wsn.nac.publish.service.PushService;
 import com.wsn.nac.publish.entity.*;
-import com.wsn.nac.publish.service.sensorRead;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
-import java.text.DecimalFormat;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
+
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CreateVirtualDataTask extends QuartzJobBean {
 
-    final private sensorRead sensorread;
     final private PushService push;
 
+    public static String IP = "192.168.0.240";
+    public static int port = 2000;
 
-
-    /**
-     * 定时发送数据，每半分钟各类传感器发送一次
-     */
-    //@Scheduled(fixedDelay = 1000*30)
     @SneakyThrows
     @Override
     public void executeInternal(JobExecutionContext jobExecutionContext)  {
 
+        DatagramSocket socket = new DatagramSocket();
+        String datamsg;
 
-        //读取所有的烟雾传感器
-        System.out.println("开始生成数据");
-        List<sensor> sensorsSmoke = sensorread.readOneSensor("SMOKE");
-        if(sensorsSmoke != null){
-            for (sensor se : sensorsSmoke) {
-                Random r = new Random();
-                pushBody body = new pushBody();
-                smoke sm = new smoke();
-                DecimalFormat format = new DecimalFormat("#0.##");
-                sm.setSmokeConcentration(Float.parseFloat(format.format(r.nextFloat() * 100)));
-                sm.setDeviceId(se.getDeviceId());
-                sm.setDateTime(new Date());
-                sm.setSensorType(se.getSensorType());
+        datamsg = "534E02AAFF16AAAA33337B16";
+        String connectToMsg = Connect(socket,datamsg);
 
-                body.setTopics("smoke");
-                body.setQos(2);
-                body.setPayload(new ObjectMapper().writeValueAsString(sm));
-                body.setRetain(false);
-                body.setClientid("sendSensorData");
-                System.out.println(sm.toString());
-                Thread.sleep(500);
-                push.pushToBroker(body);
-            }
-        }
+        // 生成获取温湿度数据的数据包
+        datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg);
+        // 获取返回的电表数据
+        String fromAmmeter= Highway1Client.Ammetergetbackmsg(socket,datamsg);
 
+        pushBody body = new pushBody();
+        temperature temp = new temperature();
 
-        //读取所有的漏电流传感器
-        List<sensor> sensorsLeakage = sensorread.readOneSensor("LEAKAGE");
-        if(sensorsLeakage != null){
-            for(sensor se : sensorsLeakage){
-                Random r = new Random();
-                pushBody body = new pushBody();
-                leakage le = new leakage();
-
-                //漏电流大小一般为0.75mA
-                DecimalFormat format = new DecimalFormat("#0.##");
-                le.setLeakageCurrent(Float.parseFloat(format.format(r.nextFloat())));
-                le.setDeviceId(se.getDeviceId());
-                le.setDateTime(new Date());
-                le.setSensorType(se.getSensorType());
-
-                body.setTopics("leakage");
-                body.setQos(2);
-                body.setPayload(new ObjectMapper().writeValueAsString(le));
-                body.setRetain(false);
-                body.setClientid("sendSensorData");
-//            System.out.println(le.toString());
-                Thread.sleep(500);
-                push.pushToBroker(body);
-            }
-        }
-
-
-        List<sensor> sensorsTemperature = sensorread.readOneSensor("TEMPERATURE");
-        if(sensorsTemperature != null){
-            for(sensor se : sensorsTemperature) {
-                Random r = new Random();
-                pushBody body = new pushBody();
-                temperature temp = new temperature();
-
-                DecimalFormat format = new DecimalFormat("#0.##");
-                temp.setTempData(Float.parseFloat(format.format(r.nextFloat()*30)));
+        temp.setTempData(Highway1Support.AmmetergetData(fromAmmeter)[1]/10);
                 //湿度的单位是%
-                temp.setHumData(Float.parseFloat(format.format(r.nextFloat()*100)));
-                temp.setDeviceId(se.getDeviceId());
-                temp.setDateTime(new Date());
-                temp.setSensorType(se.getSensorType());
+        temp.setHumData(Highway1Support.AmmetergetData(fromAmmeter)[0]/10);
+        temp.setDeviceId("1");
+        temp.setDateTime(new Date());
+        temp.setSensorType("temperature");
 
-                body.setTopics("temperature");
-                body.setQos(2);
-                body.setPayload(new ObjectMapper().writeValueAsString(temp));
-                body.setRetain(false);
-                body.setClientid("sendSensorData");
+        System.out.println("开始产生数据：");
+        System.out.println(temp);
+
+        body.setTopics("temperature");
+        body.setQos(2);
+        body.setPayload(new ObjectMapper().writeValueAsString(temp));
+        body.setRetain(false);
+        body.setClientid("sendSensorData");
 //            System.out.println(temp.toString());
-                Thread.sleep(500);
-                push.pushToBroker(body);
+        Thread.sleep(500);
+        push.pushToBroker(body);
+        System.out.println("发送到MQTT broker成功！");
+
+    }
+
+    //连接函数
+    public static String Connect(DatagramSocket socket,String datamsg) throws IOException {
+        String back = new String();
+        InetAddress address = UDPSupport.IPConvert(IP);
+        byte[] data1 = UDPSupport.getBufStrHex(datamsg);
+        DatagramPacket packet = new DatagramPacket(data1, data1.length, address, port);
+        // 发包
+        socket.send(packet);
+
+        byte[] data2 = new byte[14];
+        DatagramPacket packet2 = new DatagramPacket(data2, data2.length);
+        for (int i=0;i<1;i++)
+        {
+            try{
+                // 收包
+                socket.receive(packet2);
+                String reply = UDPSupport.getBufHexStr(packet2.getData());
+                // System.out.println(reply);
+                back = reply;
+            }catch (Exception e){
+                break;
             }
         }
-
-
-        List<sensor> sensorsElectricMeter = sensorread.readOneSensor("ELECTRICMETER");
-        if(sensorsElectricMeter != null){
-            for(sensor se : sensorsElectricMeter) {
-                Random r = new Random();
-                pushBody body = new pushBody();
-                electricMeter el = new electricMeter();
-                DecimalFormat format = new DecimalFormat("#0.##");
-                el.setCurrent(Float.parseFloat(format.format(r.nextFloat() * 10)));
-                el.setVoltage(220);
-                el.setCumulateDegree(Float.parseFloat(format.format(r.nextFloat() * 100)));
-                el.setDeviceId(se.getDeviceId());
-                el.setDateTime(new Date());
-                el.setSensorType(se.getSensorType());
-
-                body.setTopics("electricMeter");
-                body.setQos(2);
-                body.setPayload(new ObjectMapper().writeValueAsString(el));
-                body.setRetain(false);
-                body.setClientid("sendSensorData");
-//            System.out.println(el.toString());
-                Thread.sleep(500);
-                push.pushToBroker(body);
-            }
-        }
+        return back;
     }
 }
