@@ -1,10 +1,9 @@
 package com.wsn.nac.storage;
 
-import com.wsn.nac.publish.entity.electricMeter;
-import com.wsn.nac.publish.entity.leakage;
-import com.wsn.nac.publish.entity.smoke;
-import com.wsn.nac.publish.entity.temperature;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,28 +15,38 @@ import javax.annotation.Resource;
  * @version 1.0
  */
 @Service
+@RequiredArgsConstructor
 public class MessageStore {
 
-    @Resource(name="deviceHistory")
-    MongoTemplate mongoTemplate;
+    @Resource
+    MongoTemplate mongoTemplateForDevice;
 
-    public void storeElectricMeter(electricMeter electricMeter){
-        mongoTemplate.save(electricMeter,"electricMeter");
+    @Resource
+    MongoTemplate mongoTemplateForDeviceHistory;
+//
+//    public void storeElectricMeter(electricMeter electricMeter){
+//        mongoTemplate.save(electricMeter,"electricMeter");
+//
+//    }
+//    public void storeLeakage(leakage readValue) {
+//        mongoTemplate.save(readValue,"leakage");
+//    }
+//
+//    public void storeTemperature(temperature readValue) {
+//        mongoTemplate.save(readValue,"temperature");
+//    }
+//
+//    public void storeSmoke(smoke readValue) {
+//        mongoTemplate.save(readValue,"smoke");
+//    }
+    public void storeByCollectionName(SensorMessage message,String collectionName) {
+        mongoTemplateForDeviceHistory.save(message,collectionName);
+    }
 
-    }
-    public void storeLeakage(leakage readValue) {
-        mongoTemplate.save(readValue,"leakage");
-    }
-
-    public void storeTemperature(temperature readValue) {
-        mongoTemplate.save(readValue,"temperature");
-    }
-
-    public void storeSmoke(smoke readValue) {
-        mongoTemplate.save(readValue,"smoke");
-    }
-    public void storeByCollectionId(SensorMessage message,String collectionId) {
-        mongoTemplate.save(message,collectionId);
-    }
-    public void readDegree(){}
+//    public String findSensorByPosition(int position, int X, int Y) {
+//
+//        return mongoTemplateForDevice.findOne(
+//                new Query(Criteria.where("x").is(X).and("y").is(Y).and("position").is(position)), Sensor.class, "sensorTest").getId();
+//    }
+//    public void readDegree(){}
 }

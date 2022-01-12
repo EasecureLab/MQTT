@@ -1,6 +1,5 @@
 package com.wsn.nac.publish.service;
 
-import com.wsn.nac.publish.CreateVirtualDataTask;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

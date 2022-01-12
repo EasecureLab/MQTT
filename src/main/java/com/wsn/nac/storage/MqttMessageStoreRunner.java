@@ -24,9 +24,9 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
     @Override
     public void run(String... args)  {
         String HOST = "tcp://121.4.39.153:1883";
-        String[] TOPICS = {"ElectricMeter","leakage","smoke","temperature"};
-        int[] qos = {2,2,2,2};
-        String clientId = "javaClient";
+        String TOPICS = "sensorData";
+        int qos = 0;
+        String clientId = "sendSensorData";
         String userName = "wsn";
         String passWord = "wsn405407";
         MqttClient client = null;
