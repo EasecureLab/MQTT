@@ -5,7 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-/**
+
 public class UDPClient {
     //定义服务器的地址、端口号
     public static String IP = "192.168.0.240";
@@ -21,8 +21,8 @@ public class UDPClient {
 //                距离计算：E4
 //                结束：16
 //        datamsg = "5A450201201100000000A7E70000000080000304000000027029E416";
-
-        DatagramSocket socket = new DatagramSocket()  ;
+        System.out.println("开始连接");
+        DatagramSocket socket = new DatagramSocket();
         String datamsg ;
         //注册设备，并获取带有是时间戳的返回值
         // 02：源ID
@@ -30,7 +30,10 @@ public class UDPClient {
         // 3333：上位机主/备注册
         // 7B: CkSum
         datamsg = "534E02AAFF16AAAA33337B16";
+        // datamsg = "530101ffff32aaaa8516";
         String connectToMsg = Connect(socket,datamsg);
+
+        System.out.println("连接成功！");
 
 
         int count = 1;
@@ -47,6 +50,12 @@ public class UDPClient {
                 +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
                 +"湿度："+ Highway1Support.AmmetergetData(fromAmmeter)[0]/10+"%"
                 + " 温度："+Highway1Support.AmmetergetData(fromAmmeter)[1]/10+"℃"+"——设备标签："+ Highway1Support.getTag());
+
+        /**
+        System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
+                +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
+                +"光照："+ Highway1Support.AmmetergetData(fromAmmeter)+"Lux"+"——设备标签："+ Highway1Support.getTag());
+         */
         count++;
         while (true) {
             try {
@@ -95,4 +104,4 @@ public class UDPClient {
     }
 
 }
- */
+

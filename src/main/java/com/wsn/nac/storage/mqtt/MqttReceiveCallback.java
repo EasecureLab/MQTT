@@ -69,7 +69,9 @@ public class MqttReceiveCallback implements MqttCallback {
             sensorMessage.setY(Y);
             sensorMessage.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
             sensorMessage.setData(sensorData.getValue());
+            System.out.println(sensorMessage);
             messageStore.storeByCollectionName(sensorMessage, screen.toString());
+            System.out.println("保存成功");
         }
 
 

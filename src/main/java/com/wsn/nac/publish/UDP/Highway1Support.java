@@ -1,5 +1,6 @@
 package com.wsn.nac.publish.UDP;
 
+
 /**
  * @author zwb
  * @date 2019/8/28 - 16:56
@@ -10,14 +11,18 @@ public class Highway1Support {
     // string是注册的返回包
     public static String AmmeterfromConnecttoMsg20Current(String string){
         String msg = new String();
-        String CkSum = "0201111100000000"+string.substring(20,26)+
+        String CkSum = "0201ff1100000000"+string.substring(20,26)+
                 "0000008000"+"010300000002C40B";
+        // String CkSum = "02011911" + "010300000002C40B";
         // string.substring(20,26)是时间信息
         // 030400080002F1EB：可能是请求电表数据的，之前的都是他的时间信息
         // 温度传感器的问询：010300000002C40B
+        // 光照度传感器问询：010300060001640B
         // 上位机：5A4502011911000000000000000000008000010300000002C40B7216
-        msg = msg+"5A450201111100000000"+string.substring(20,26)+
+        msg = msg+"5A450201ff1100000000"+string.substring(20,26)+
                 "0000008000"+"010300000002C40B"+UDPSupport.getCkSum(CkSum)+"16";
+        // msg = msg + "5A4502011911" + "010300000002C40B"+UDPSupport.getCkSum(CkSum)+"16";
+        System.out.println(msg);
         return msg;
     }
 
@@ -46,6 +51,8 @@ public class Highway1Support {
     public static float[] AmmetergetData(String string){
         // 返回温湿度数据示例：01030401E6FF9F1BA0
         //byte[] fromData;
+        // 温度传感器的数据处理
+
         String str;
         String tempStr;
         String humStr;
@@ -72,9 +79,25 @@ public class Highway1Support {
             float f = (float)(sign*man*Math.pow(2,exp - 150));
             return Float.toString(f);
              */
+
             return datas;
         }
         return null;
+        /**
+         * 光照度传感器部分代码
+        String str;
+        String tempStr;
+        if (string.length()>26) {
+            // fromData = UDPSupport.getBufStrHex(string.substring(42,50));
+            str = string.substring(36, 54);
+            tempStr = str.substring(6, 10);
+            float temp = hexToTen(tempStr);
+
+            return temp;
+        }
+        return null;
+         */
+
     }
 
     public static String Tag;
