@@ -21,7 +21,7 @@ public class SensorMessage implements Serializable {
     // private final DeviceTypeEnum deviceType = DeviceTypeEnum.SENSOR;
     @Id
     private String id;
-    @Schema(description = "历史数据对应设备表的唯一id")
+    //@Schema(description = "历史数据对应设备表的唯一id")
     //private String deviceId;   //先注释掉
 
 
