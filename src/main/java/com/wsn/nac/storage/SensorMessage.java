@@ -16,12 +16,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SensorMessage implements Serializable {
+    //对应数据库
     // @JsonIgnore
     // private final DeviceTypeEnum deviceType = DeviceTypeEnum.SENSOR;
     @Id
     private String id;
     @Schema(description = "历史数据对应设备表的唯一id")
-    private String deviceId;
+    //private String deviceId;   //先注释掉
+
+
     // 传感器历史应该返回一个Map,因为传感器的返回类型不定,使用固定字段不好扩展
     // private Float leakageCurrent;
     // private Float smokeConcentration;
