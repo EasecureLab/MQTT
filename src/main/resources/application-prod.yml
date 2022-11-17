@@ -11,19 +11,28 @@ management:
   # 使用独立的 121 端口而不是提供业务的端口作为服务监测的端口, 这样可以方便的进行防火墙配置, 避免外网访问
   server:
     port: 121
+#spring:
+#  cloud:
+#    consul:
+#      host: localhost
+#      port: 8500
+#      discovery:
+#        enabled: true
+#        register: true
+#        deregister: true
+#        prefer-ip-address: true
+#        health-check-path: /check
+#        heartbeat:
+#          enabled: true
+
 spring:
   cloud:
     consul:
-      host: localhost
+      host: 10.31.110.124
       port: 8500
       discovery:
-        enabled: true
-        register: true
-        deregister: true
-        prefer-ip-address: true
-        health-check-path: /check
-        heartbeat:
-          enabled: true
+        enabled: false
+
 logging:
   file:
     path: /etc/log

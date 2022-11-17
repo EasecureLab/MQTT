@@ -19,5 +19,6 @@ public class Highway1Client {
         String reply = UDPSupport.getBufHexStr(packet2.getData());
         System.out.println(reply);
         return reply;
+        // return "";
     }
 }

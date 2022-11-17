@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @EnableSwagger2Doc
-@EnableDiscoveryClient
+// @EnableDiscoveryClient
 @SpringBootApplication
 public class MqttApplication {
 

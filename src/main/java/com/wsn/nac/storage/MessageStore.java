@@ -1,9 +1,9 @@
 package com.wsn.nac.storage;
 
+import com.wsn.nac.storage.entity.Sensor;
+import com.wsn.nac.storage.entity.SensorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,8 +39,12 @@ public class MessageStore {
 //    public void storeSmoke(smoke readValue) {
 //        mongoTemplate.save(readValue,"smoke");
 //    }
-    public void storeByCollectionName(SensorMessage message,String collectionName) {
+    public void storeByCollectionName(SensorMessage message, String collectionName) {
         mongoTemplateForDeviceHistory.save(message,collectionName);
+    }
+
+    public void storeByCollectionName(Sensor sensor, String collectionName) {
+        mongoTemplateForDeviceHistory.save(sensor,collectionName);
     }
 
 //    public String findSensorByPosition(int position, int X, int Y) {

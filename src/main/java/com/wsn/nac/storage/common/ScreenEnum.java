@@ -5,7 +5,7 @@ public enum ScreenEnum {
     SCREEN2(12, 19),
     SCREEN3(7, 14),
     OTHERS(0, 0);
-    private static final ScreenEnum[] SCREENS = {OTHERS, SCREEN1, SCREEN2, SCREEN3};
+    private static final ScreenEnum[] SCREENS = {SCREEN1, SCREEN2, SCREEN3, OTHERS};
     private final Integer rows;
     private final Integer cols;
 
@@ -19,6 +19,7 @@ public enum ScreenEnum {
     public int getCols(){
         return cols;
     }
+    // 下标默认从0开始
     public static ScreenEnum select(int num){
         return SCREENS[num];
     }

@@ -14,18 +14,29 @@ management:
 spring:
   cloud:
     consul:
+#      host: 10.31.110.124
       host: 121.4.39.153
       port: 8500
       discovery:
-        enabled: true
-        register: true
-        deregister: true
-        prefer-ip-address: true
-        health-check-path: /check
-        heartbeat:
-          enabled: true
+        enabled: false
+#spring:
+#  cloud:
+#    consul:
+#      host: 121.4.39.153
+#      port: 8500
+#      discovery:
+#        enabled: true
+#        register: true
+#        deregister: true
+#        prefer-ip-address: true
+#        health-check-path: /check
+#        heartbeat:
+#          enabled: true
+
 logging:
   file:
     path: /etc/log
     name: mqtt.log
+  level:
+    root: info
 

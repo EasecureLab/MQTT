@@ -9,18 +9,30 @@ public class Highway1Support {
 
     //注册返回包生成电流数据发送包
     // string是注册的返回包
-    public static String AmmeterfromConnecttoMsg20Current(String string){
+    public static String AmmeterfromConnecttoMsg20Current(String string, String temp,String dataPackId){
+
         String msg = new String();
-        String CkSum = "0201ff1100000000"+string.substring(20,26)+
-                "0000008000"+"010300000002C40B";
+        // 需改
+        String CkSum = "02" + dataPackId + "ff1100000000"+string.substring(20,26)+
+                "0000008000"+ temp;
+
+        // String CkSum = "0201ff1100000000"+string.substring(20,26)+
+        //         "0000008000"+"010300030002340B";
+        // String CkSum = "0201011100000000"+string.substring(20,26)+
+        //         "0000008000"+"2A030001000293D0";
         // String CkSum = "02011911" + "010300000002C40B";
         // string.substring(20,26)是时间信息
         // 030400080002F1EB：可能是请求电表数据的，之前的都是他的时间信息
         // 温度传感器的问询：010300000002C40B
         // 光照度传感器问询：010300060001640B
+        // 外表温度传感器问询： 01030001000295CB
+        // 测温导轨主机：2A030001000293D0
         // 上位机：5A4502011911000000000000000000008000010300000002C40B7216
-        msg = msg+"5A450201ff1100000000"+string.substring(20,26)+
-                "0000008000"+"010300000002C40B"+UDPSupport.getCkSum(CkSum)+"16";
+
+        // 需改
+        msg = msg+"5A4502"+ dataPackId + "FF1100000000"+string.substring(20,26)+
+                 "0000008000"+ temp + UDPSupport.getCkSum(CkSum)+"16";
+                // "0000008000"+"2A030001000293D0"+UDPSupport.getCkSum(CkSum)+"16";
         // msg = msg + "5A4502011911" + "010300000002C40B"+UDPSupport.getCkSum(CkSum)+"16";
         System.out.println(msg);
         return msg;

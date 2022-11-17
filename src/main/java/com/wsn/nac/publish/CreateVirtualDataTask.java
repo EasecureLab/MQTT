@@ -1,28 +1,28 @@
-//package com.wsn.nac.publish;
+// package com.wsn.nac.publish;
 //
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.wsn.nac.publish.UDP.Highway1Client;
-//import com.wsn.nac.publish.UDP.Highway1Support;
-//import com.wsn.nac.publish.UDP.UDPSupport;
-//import com.wsn.nac.publish.service.PushService;
-//import com.wsn.nac.publish.entity.*;
-//import lombok.RequiredArgsConstructor;
-//import lombok.SneakyThrows;
-//import org.quartz.JobExecutionContext;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.scheduling.quartz.QuartzJobBean;
-//import org.springframework.stereotype.Component;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.wsn.nac.publish.UDP.Highway1Client;
+// import com.wsn.nac.publish.UDP.Highway1Support;
+// import com.wsn.nac.publish.UDP.UDPSupport;
+// import com.wsn.nac.publish.service.PushService;
+// import com.wsn.nac.publish.entity.*;
+// import lombok.RequiredArgsConstructor;
+// import lombok.SneakyThrows;
+// import org.quartz.JobExecutionContext;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.scheduling.quartz.QuartzJobBean;
+// import org.springframework.stereotype.Component;
 //
-//import java.io.IOException;
-//import java.net.DatagramPacket;
-//import java.net.DatagramSocket;
-//import java.net.InetAddress;
-//import java.util.Date;
+// import java.io.IOException;
+// import java.net.DatagramPacket;
+// import java.net.DatagramSocket;
+// import java.net.InetAddress;
+// import java.util.Date;
 //
 //
-//@Component
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-//public class CreateVirtualDataTask extends QuartzJobBean {
+// @Component
+// @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+// public class CreateVirtualDataTask extends QuartzJobBean {
 //
 //    final private PushService push;
 //
@@ -37,6 +37,8 @@
 //        String datamsg;
 //
 //        datamsg = "534E02AAFF16AAAA33337B16";
+//
+//
 //        String connectToMsg = Connect(socket,datamsg);
 //
 //        // 生成获取温湿度数据的数据包
@@ -62,7 +64,7 @@
 //        body.setPayload(new ObjectMapper().writeValueAsString(temp));
 //        body.setRetain(false);
 //        body.setClientid("sendSensorData");
-////            System.out.println(temp.toString());
+// //            System.out.println(temp.toString());
 //        Thread.sleep(500);
 //        push.pushToBroker(body);
 //        System.out.println("发送到MQTT broker成功！");
@@ -94,4 +96,4 @@
 //        }
 //        return back;
 //    }
-//}
+// }

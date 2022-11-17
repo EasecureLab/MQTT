@@ -6,6 +6,7 @@ spring:
       authentication-database: admin
       username: scuiot_root
       password: scuiot2333
+#      host: 10.31.110.124
       host: 121.4.39.153
       port: 27018
       maxConnectionIdleTime: 60000
@@ -15,10 +16,12 @@ swagger:
   description: "Control the rate, start and end of sensor data generation!"
   license: Apache License, Version 2.0
   license-url: https://www.apache.org/licenses/LICENSE-2.0.html
-  base-package: com.wsn.nac.publish.controller
+#  base-package: com.wsn.nac.publish.contrsoller
 server:
   port: 8088
   servlet:
     encoding:
       charset: UTF-8
   max-http-header-size: 102400
+
+

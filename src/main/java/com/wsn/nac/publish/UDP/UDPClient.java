@@ -7,72 +7,145 @@ import java.net.InetAddress;
 
 
 public class UDPClient {
-    //定义服务器的地址、端口号
+    // 定义服务器的地址、端口号
     public static String IP = "192.168.0.240";
+    // 端口需改
     public static int port = 2000;
         //public static String str = "192.168.0.3";
         //public static int port = 8080;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         //        不变：5A450201201100000000
 //                时间戳：A7E700
-//                不变：0000008000
+//                不变：0000008000-0
 //                查询电表数据：0304000000027029
 //                距离计算：E4
 //                结束：16
 //        datamsg = "5A450201201100000000A7E70000000080000304000000027029E416";
         System.out.println("开始连接");
         DatagramSocket socket = new DatagramSocket();
-        String datamsg ;
+        String datamsg;
         //注册设备，并获取带有是时间戳的返回值
         // 02：源ID
         // AAAA：数据传输方式
         // 3333：上位机主/备注册
         // 7B: CkSum
-        datamsg = "534E02AAFF16AAAA33337B16";
+        // datamsg = "534E02AAFF16AAAA33337B16";
+        datamsg = "534E01AAFF16AAAA33337A16";
+
+        System.out.println("连接指令：" + datamsg);
+
         // datamsg = "530101ffff32aaaa8516";
         String connectToMsg = Connect(socket,datamsg);
-
+        System.out.println("connectToMsg:" + connectToMsg);
         System.out.println("连接成功！");
 
 
         int count = 1;
         //从连接到数据发送,获取电压数据
 
-        // 生成获取电表数据的数据包
-        datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg);
-        // 获取返回的电表数据
-        String fromAmmeter= Highway1Client.Ammetergetbackmsg(socket,datamsg);
+        String temp1 = "010300030010B406";
+        String temp2 = "020300030010B435";
+        String temp3 = "030300030010B5E4";
+        String temp4 = "040300030010B453";
+        String temp5 = "050300030010B582";
+        String temp6 = "060300030010B5B1";
 
-        System.out.println("开始采集数据！");
 
-        System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
-                +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
-                +"湿度："+ Highway1Support.AmmetergetData(fromAmmeter)[0]/10+"%"
-                + " 温度："+Highway1Support.AmmetergetData(fromAmmeter)[1]/10+"℃"+"——设备标签："+ Highway1Support.getTag());
 
-        /**
-        System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
-                +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
-                +"光照："+ Highway1Support.AmmetergetData(fromAmmeter)+"Lux"+"——设备标签："+ Highway1Support.getTag());
-         */
-        count++;
-        while (true) {
-            try {
-                Thread.sleep(2000);
+        // String dataMsg1 = "5A4501931211000000000000800000008000010300030010B4068816";
+        // String dataMsg2 = "5A4501941211000000000000800000008000020300030010B435B916";
+        // String dataMsg3 = "5A4501951211000000000000800000008000030300030010B5E46B16";
+        // String dataMsg4 = "5A4501901211000000000000800000008000040300030010B453D516";
+        // String dataMsg5 = "5A4501911211000000000000800000008000050300030010B5820716";
+        // String dataMsg6 = "5A4501921211000000000000800000008000060300030010B5B13816";
 
-                datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(fromAmmeter);
-                fromAmmeter = Highway1Client.Ammetergetbackmsg(socket, datamsg);
 
-                System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
-                        +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
-                        +"湿度："+ Highway1Support.AmmetergetData(fromAmmeter)[0]/10+"%"
-                        + " 温度："+Highway1Support.AmmetergetData(fromAmmeter)[1]/10+"℃"+"——设备标签："+ Highway1Support.getTag());
-                count++;
-            } catch (Exception e) {
-                System.out.println("失败:" + e);
-            }
+        String dataMsg7 = "5A45013513110000000000008000000080001B0300030010B63C7D16";
+        String dataMsg8 = "5A45013613110000000000008000000080001C0300030010B78BCF16";
+        String dataMsg9 = "5A45013713110000000000008000000080001D0300030010B65A9F16";
+
+
+        while (true){
+            // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,temp1,"01");
+            // 获取返回的电表数据
+            String fromAmmeter1= Highway1Client.Ammetergetbackmsg(socket,dataMsg8);
+            System.out.println("fromAmmeter1: " + fromAmmeter1);
+
+            Thread.sleep(3000);
+
+            // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,temp2,"02");
+            // 获取返回的电表数据
+            String fromAmmeter2= Highway1Client.Ammetergetbackmsg(socket,dataMsg8);
+            System.out.println("fromAmmeter2: " + fromAmmeter2);
+
+            Thread.sleep(3000);
+
+            // // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,temp3,"03");
+            // // 获取返回的电表数据
+            // String fromAmmeter3= Highway1Client.Ammetergetbackmsg(socket,dataMsg3);
+            // System.out.println("fromAmmeter3: " + fromAmmeter3);
+            //
+            // Thread.sleep(1000);
+            //
+            // // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,temp4,"04");
+            // // 获取返回的电表数据
+            // String fromAmmeter4= Highway1Client.Ammetergetbackmsg(socket,dataMsg4);
+            // System.out.println("fromAmmeter4: " + fromAmmeter4);
+            //
+            // Thread.sleep(1000);
+            //
+            // // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,temp5,"05");
+            // // 获取返回的电表数据
+            // String fromAmmeter5= Highway1Client.Ammetergetbackmsg(socket,dataMsg5);
+            // System.out.println("fromAmmeter5: " + fromAmmeter5);
+            //
+            // Thread.sleep(1000);
+            //
+            // // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,temp6,"06");
+            // // 获取返回的电表数据
+            // String fromAmmeter6= Highway1Client.Ammetergetbackmsg(socket,dataMsg6);
+            // System.out.println("fromAmmeter6: " + fromAmmeter6);
+            //
+            // Thread.sleep(2000);
+            // // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg,"ODOA");
+            // System.out.println("\n");
         }
+
+        // // 生成获取电表数据的数据包
+        // datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(connectToMsg);
+        // // 获取返回的电表数据
+        // String fromAmmeter= Highway1Client.Ammetergetbackmsg(socket,datamsg);
+        // System.out.println("fromAmmeter: " + fromAmmeter);
+        // System.out.println("开始采集数据！");
+        //
+        // System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
+        //         +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
+        //         +"湿度："+ Highway1Support.AmmetergetData(fromAmmeter)[0]/10+"%"
+        //         + " 温度："+Highway1Support.AmmetergetData(fromAmmeter)[1]/10+"℃"+"——设备标签："+ Highway1Support.getTag());
+        //
+        // /**
+        // System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
+        //         +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
+        //         +"光照："+ Highway1Support.AmmetergetData(fromAmmeter)+"Lux"+"——设备标签："+ Highway1Support.getTag());
+        //  */
+        // count++;
+        // while (true) {
+        //     try {
+        //         Thread.sleep(2000);
+        //
+        //         datamsg = Highway1Support.AmmeterfromConnecttoMsg20Current(fromAmmeter);
+        //         fromAmmeter = Highway1Client.Ammetergetbackmsg(socket, datamsg);
+        //
+        //         System.out.println("第"+count+"次："+"设备ID："+ Highway1Support.AmmetergetEquipmentID(fromAmmeter)+"——总线ID："+ Highway1Support.AmmetergetHighwayID(Integer.toString(port))
+        //                 +"——时间戳："+ Highway1Support.AmmetergetTime(fromAmmeter)+"——数据信息："
+        //                 +"湿度："+ Highway1Support.AmmetergetData(fromAmmeter)[0]/10+"%"
+        //                 + " 温度："+Highway1Support.AmmetergetData(fromAmmeter)[1]/10+"℃"+"——设备标签："+ Highway1Support.getTag());
+        //         count++;
+        //     } catch (Exception e) {
+        //         System.out.println("失败:" + e);
+        //     }
+        // }
 
     }
 

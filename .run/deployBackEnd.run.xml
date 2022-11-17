@@ -1,12 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="deployBackend" type="docker-deploy" factoryName="dockerfile" server-name="TencentBackendDocker">
+  <configuration default="false" name="deployBackend" type="docker-deploy" factoryName="dockerfile" server-name="TencentCloud">
     <deployment type="dockerfile">
       <settings>
         <option name="imageTag" value="mqtt" />
-        <option name="buildCliOptions" value="" />
-        <option name="command" value="" />
         <option name="containerName" value="mqtt" />
-        <option name="entrypoint" value="" />
         <option name="commandLineOptions" value="--network host" />
         <option name="sourceFilePath" value="src/docker/Dockerfile" />
         <option name="volumeBindings">

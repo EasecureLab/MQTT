@@ -1,21 +1,30 @@
 package com.wsn.nac.storage.mqtt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wsn.nac.Util.TimeFormatTransUtils;
-import com.wsn.nac.storage.MessageFormat;
+import com.wsn.nac.storage.entity.MessageFormat;
 import com.wsn.nac.storage.MessageStore;
-import com.wsn.nac.storage.SensorMessage;
+import com.wsn.nac.storage.entity.Sensor;
+import com.wsn.nac.storage.entity.SensorData;
+import com.wsn.nac.storage.entity.SensorMessage;
 import com.wsn.nac.storage.common.ScreenEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * UTF-8
@@ -24,43 +33,88 @@ import java.time.LocalDateTime;
  * @version 1.0
  */
 @Component
+@Slf4j
 public class MqttReceiveCallback implements MqttCallback {
 
-
+    // 服务器cpu个数为8，核数为1
+    ExecutorService threadPool = new ThreadPoolExecutor(4,
+            8,2L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1000));
 
     @Autowired
     MessageStore messageStore;
+
     @Override
     public void connectionLost(Throwable throwable) {
+        // 连接丢失后，在这里面进行重连，如接收消息类中设置 options.setAutomaticReconnect(true);则此处可不做设置，会自动重连
+        log.error(throwable.getMessage());
+        log.error("连接丢失");
 
     }
 
     @Override
-    public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-        String message=new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
+    public void messageArrived(String topic, MqttMessage mqttMessage) throws JsonProcessingException {
+        String message = new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
 
-        // SensorMessage sensorMessage = new ObjectMapper().readValue(message, SensorMessage.class);
-//        String collectionId = sensorMessage.getDeviceId();
-//        sensorMessage.setId("");
-//        messageStore.storeByCollectionId(sensorMessage,collectionId);
+        log.info("订阅的消息内容：");
+        log.info("messageArrived() topic: "+topic+", message is "+message);
 
-//        if ("electricMeter".equals(topic)){
-//            messageStore.storeElectricMeter(new ObjectMapper().readValue(message,electricMeter.class));
-//        }else if ("leakage".equals(topic)){
-//            messageStore.storeLeakage(new ObjectMapper().readValue(message, leakage.class));
-//        }else if ("temperature".equals(topic)){
-//            messageStore.storeTemperature(new ObjectMapper().readValue(message, temperature.class));
-//        }else if ("smoke".equals(topic)){
-//            messageStore.storeSmoke(new ObjectMapper().readValue(message, smoke.class));
-//        }
-        // System.out.println(collectionId);
-
-        System.out.println("订阅的消息内容：");
-        System.out.println("messageArrived() topic: "+topic+", message is "+message);
         MessageFormat messageFormat = new ObjectMapper().readValue(message, MessageFormat.class);
-        for(MessageFormat.SensorData sensorData : messageFormat.getData().getC1_D1()) {
+        // 存在info字段，不处理，直接返回
+        if (messageFormat.getInfo() != null){
+            log.warn("包含info，为描述信息");
+            return;
+        }
+        // data为空，直接返回
+        if (messageFormat.getData() == null || messageFormat.getData().toString().length() == 0) {
+            log.warn("data为空");
+            return;
+        }
+        // System.out.println("data:" + messageFormat.getData());
+
+        // 将data按map进行解析
+        // key 为 C1D1,C1D2,C2D1,C3D1...
+        // value 为 List<SensorData>,  这里直接解析 List<SensorData> 会报错，先存为Object, 后面再转化为SensorData
+        Map<String,List<Object>> readValue = new ObjectMapper().readValue(messageFormat.getData().toString(), Map.class);
+        // 遍历 map
+        for (List<Object> listObject : readValue.values()) {
+            // 遍历 List<Object>
+            for (Object object : listObject) {
+                // Object 转化为 SensorData：Object转化为json，再从json中解析出SensorData
+                String jsonObject = new ObjectMapper().writeValueAsString(object);
+                SensorData sensorData = new ObjectMapper().readValue(jsonObject, SensorData.class);
+                log.info("sensorData: " + sensorData);
+                // id 为 _io_status 的不做操作
+                if (sensorData.getId().equals("_io_status"))
+                    continue;
+                // 处理SensorData
+                threadPool.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleSensorData(sensorData);
+                    }
+                });
+
+            }
+        }
+    }
+
+    /**
+     * @param sensorData:
+     * @return void
+     * @author jia
+     * @description 处理收到的sensorData，将其存入数据库中
+     * @date 2022/8/29 17:05
+     */
+    public void handleSensorData(SensorData sensorData){
+        if (sensorData.getDesc().equals("screen-temperature")){  //大屏温度
+            if (sensorData.getId().startsWith("null")){
+                return;
+            }
             SensorMessage sensorMessage = new SensorMessage();
-            String[] positionData = sensorData.getId().split("\\.");
+            String[] positionData = sensorData.getId().split("-");
+
+            // System.out.println(Arrays.toString(positionData));
+
             int position = Integer.parseInt(positionData[0]);
             int X = Integer.parseInt(positionData[1]);
             int Y = Integer.parseInt(positionData[2]);
@@ -69,13 +123,24 @@ public class MqttReceiveCallback implements MqttCallback {
             sensorMessage.setY(Y);
             sensorMessage.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
             sensorMessage.setData(sensorData.getValue());
-            System.out.println(sensorMessage);
-            messageStore.storeByCollectionName(sensorMessage, screen.toString());
-            System.out.println("保存成功");
-        }
 
+            log.info("sensorMessageDataBase:" + sensorMessage);
+            messageStore.storeByCollectionName(sensorMessage, screen.toString() + "Test4");
+        }else { // 其他传感器
+            log.info("sensorData:" + sensorData);
+            Sensor sensor = new Sensor();
+            sensor.setDeviceId(sensorData.getId());
+            sensor.setDesc(sensorData.getDesc());
+            sensor.setData(sensorData.getValue());
+            sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
+
+            log.info("sensorDataBase:" + sensor);
+            messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString() + "Test4");
+        }
+        log.info("保存成功");
 
     }
+
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {

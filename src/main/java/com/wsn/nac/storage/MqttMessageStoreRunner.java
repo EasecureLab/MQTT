@@ -23,6 +23,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args)  {
+        // String HOST = "tcp://10.31.110.124:1883";
         String HOST = "tcp://121.4.39.153:1883";
         String TOPICS = "sensorData";
         int qos = 0;
@@ -46,6 +47,8 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
             options.setConnectionTimeout(10);
             // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
             options.setKeepAliveInterval(20);
+            // 设置断开后重新连接
+            options.setAutomaticReconnect(true);
             // 设置回调函数
             client.setCallback(mqttReceive);
             client.connect(options);
