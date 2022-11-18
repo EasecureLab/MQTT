@@ -110,24 +110,32 @@ public class MqttReceiveCallback implements MqttCallback {
             if (sensorData.getId().startsWith("null")){
                 return;
             }
-            SensorMessage sensorMessage = new SensorMessage();
+
             String[] positionData = sensorData.getId().split("-");
 
             // System.out.println(Arrays.toString(positionData));
 
             int position = Integer.parseInt(positionData[0]);
-            int X = Integer.parseInt(positionData[1]);
-            int Y = Integer.parseInt(positionData[2]);
             ScreenEnum screen = ScreenEnum.select(position);
-            sensorMessage.setX(X);
-            sensorMessage.setY(Y);
-            sensorMessage.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
-            sensorMessage.setData(sensorData.getValue());
+            // int X = Integer.parseInt(positionData[1]);
+            // int Y = Integer.parseInt(positionData[2]);
+            // SensorMessage sensorMessage = new SensorMessage();
+            // sensorMessage.setX(X);
+            // sensorMessage.setY(Y);
+            // sensorMessage.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
+            // sensorMessage.setData(sensorData.getValue());
+            //
+            // log.info("sensorMessageDataBase:" + sensorMessage);
+            // messageStore.storeByCollectionName(sensorMessage, screen.toString() + "Test4");
+            Sensor sensor = new Sensor();
+            sensor.setDeviceId(sensorData.getId());
+            sensor.setDesc(sensorData.getDesc());
+            sensor.setData(sensorData.getValue());
+            sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
+            messageStore.storeByCollectionName(sensor, screen.toString() + "Test4");
 
-            log.info("sensorMessageDataBase:" + sensorMessage);
-            messageStore.storeByCollectionName(sensorMessage, screen.toString() + "Test4");
         }else { // 其他传感器
-            log.info("sensorData:" + sensorData);
+            // log.info("sensorData:" + sensorData);
             Sensor sensor = new Sensor();
             sensor.setDeviceId(sensorData.getId());
             sensor.setDesc(sensorData.getDesc());
