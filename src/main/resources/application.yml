@@ -6,8 +6,8 @@ spring:
       authentication-database: admin
       username: scuiot_root
       password: scuiot2333
-#      host: 10.31.110.124
-      host: 121.4.39.153
+      host: 10.31.110.124
+#      host: 121.4.39.153
       port: 27018
       maxConnectionIdleTime: 60000
 
