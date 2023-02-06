@@ -1,11 +1,11 @@
 package com.wsn.nac.storage.common;
 
 public enum ScreenEnum {
-    SCREEN1(8, 16),
-    SCREEN2(12, 19),
-    SCREEN3(7, 14),
+    SCREENWelcome(8, 16),
+    SCREEN1(12, 19),
+    SCREEN2(7, 14),
     OTHERS(0, 0);
-    private static final ScreenEnum[] SCREENS = {SCREEN1, SCREEN2, SCREEN3, OTHERS};
+    private static final ScreenEnum[] SCREENS = {SCREENWelcome,SCREEN1, SCREEN2, OTHERS};
     private final Integer rows;
     private final Integer cols;
 

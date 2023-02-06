@@ -7,7 +7,6 @@ import com.wsn.nac.storage.entity.MessageFormat;
 import com.wsn.nac.storage.MessageStore;
 import com.wsn.nac.storage.entity.Sensor;
 import com.wsn.nac.storage.entity.SensorData;
-import com.wsn.nac.storage.entity.SensorMessage;
 import com.wsn.nac.storage.common.ScreenEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -15,10 +14,10 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -38,7 +37,7 @@ public class MqttReceiveCallback implements MqttCallback {
 
     // 服务器cpu个数为8，核数为1
     ExecutorService threadPool = new ThreadPoolExecutor(4,
-            8,2L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1000));
+            9,2L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1000));
 
     @Autowired
     MessageStore messageStore;
@@ -48,7 +47,6 @@ public class MqttReceiveCallback implements MqttCallback {
         // 连接丢失后，在这里面进行重连，如接收消息类中设置 options.setAutomaticReconnect(true);则此处可不做设置，会自动重连
         log.error(throwable.getMessage());
         log.error("连接丢失");
-
     }
 
     @Override
@@ -69,6 +67,12 @@ public class MqttReceiveCallback implements MqttCallback {
             log.warn("data为空");
             return;
         }
+        // // 变化的数据不做处理，直接返回
+        // if ("change".equals(messageFormat.getType())){
+        //     log.warn("变化数据，不做处理");
+        //     return;
+        // }
+
         // System.out.println("data:" + messageFormat.getData());
 
         // 将data按map进行解析
@@ -84,8 +88,9 @@ public class MqttReceiveCallback implements MqttCallback {
                 SensorData sensorData = new ObjectMapper().readValue(jsonObject, SensorData.class);
                 log.info("sensorData: " + sensorData);
                 // id 为 _io_status 的不做操作
-                if (sensorData.getId().equals("_io_status"))
+                if ("_io_status".equals(sensorData.getId())) {
                     continue;
+                }
                 // 处理SensorData
                 threadPool.execute(new Runnable() {
                     @Override
@@ -106,7 +111,8 @@ public class MqttReceiveCallback implements MqttCallback {
      * @date 2022/8/29 17:05
      */
     public void handleSensorData(SensorData sensorData){
-        if (sensorData.getDesc().equals("screen-temperature")){  //大屏温度
+        if ("screen-temperature".equals(sensorData.getDesc())){  //大屏温度
+            // null开头的不做处理
             if (sensorData.getId().startsWith("null")){
                 return;
             }
@@ -132,7 +138,11 @@ public class MqttReceiveCallback implements MqttCallback {
             sensor.setDesc(sensorData.getDesc());
             sensor.setData(sensorData.getValue());
             sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
-            messageStore.storeByCollectionName(sensor, screen.toString() + "Test4");
+            // 1-6-23 位置的数据有问题，直接设置为25
+            if (sensor.getDeviceId().equals("1-6-23")){
+                sensor.setData(25);
+            }
+            messageStore.storeByCollectionName(sensor, screen.toString());
 
         }else { // 其他传感器
             // log.info("sensorData:" + sensorData);
@@ -143,7 +153,7 @@ public class MqttReceiveCallback implements MqttCallback {
             sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
 
             log.info("sensorDataBase:" + sensor);
-            messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString() + "Test4");
+            messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString());
         }
         log.info("保存成功");
 

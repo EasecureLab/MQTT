@@ -23,11 +23,12 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args)  {
-        // String HOST = "tcp://10.31.110.124:1883";
-        String HOST = "tcp://121.4.39.153:1883";
+        String HOST = "tcp://10.31.110.124:1883";
+        // String HOST = "tcp://121.4.39.153:1883";
         String TOPICS = "sensorData";
         int qos = 0;
-        String clientId = "sendSensorData";
+        // 测试的时候修改为2，上传服务器的时候注意修改为1
+        String clientId = "sendSensorData1";
         String userName = "wsn";
         String passWord = "wsn405407";
         MqttClient client = null;

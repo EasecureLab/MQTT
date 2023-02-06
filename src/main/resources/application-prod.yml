@@ -30,8 +30,9 @@ spring:
     consul:
       host: 10.31.110.124
       port: 8500
-      discovery:
-        enabled: false
+#      discovery:
+#        enabled: false
+      enabled: false
 
 logging:
   file:

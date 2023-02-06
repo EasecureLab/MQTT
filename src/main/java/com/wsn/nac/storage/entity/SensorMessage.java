@@ -12,7 +12,6 @@ import org.springframework.data.annotation.Id;
 import java.io.Serializable;
 
 /**
- * @param null:
  * @return null
  * @author jia
  * @description 大屏温度传感器
