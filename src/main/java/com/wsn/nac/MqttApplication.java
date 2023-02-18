@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 
 @EnableScheduling
 @EnableSwagger2Doc
@@ -14,6 +17,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class MqttApplication {
 
     public static void main(String[] args) {
+        // 设置运行的console日志的时区
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+8");
+        TimeZone.setDefault(timeZone);
+
         SpringApplication.run(MqttApplication.class, args);
     }
 

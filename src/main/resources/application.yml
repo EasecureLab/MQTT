@@ -10,6 +10,9 @@ spring:
 #      host: 121.4.39.153
       port: 27018
       maxConnectionIdleTime: 60000
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 swagger:
   title: SensorController API
@@ -23,5 +26,6 @@ server:
     encoding:
       charset: UTF-8
   max-http-header-size: 102400
+
 
 

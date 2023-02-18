@@ -1,24 +1,13 @@
 package com.wsn.nac.storage.common;
 
 public enum ScreenEnum {
-    SCREENWelcome(8, 16),
-    SCREEN1(12, 19),
-    SCREEN2(7, 14),
-    OTHERS(0, 0);
-    private static final ScreenEnum[] SCREENS = {SCREENWelcome,SCREEN1, SCREEN2, OTHERS};
-    private final Integer rows;
-    private final Integer cols;
+    SCREENWelcome, // 迎宾屏
+    SCREEN1, // 大屏1
+    SCREEN2, // 大屏2
+    OTHERS;  // 其他
 
-    ScreenEnum(Integer rows, Integer cols) {
-        this.rows = rows;
-        this.cols = cols;
-    }
-    public int getRows(){
-        return rows;
-    }
-    public int getCols(){
-        return cols;
-    }
+    private static final ScreenEnum[] SCREENS = {SCREENWelcome,SCREEN1, SCREEN2, OTHERS};
+
     // 下标默认从0开始
     public static ScreenEnum select(int num){
         return SCREENS[num];

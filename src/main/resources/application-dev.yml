@@ -17,8 +17,8 @@ spring:
 #      host: 10.31.110.124
       host: 121.4.39.153
       port: 8500
-#      discovery:
-#        enabled: false
+      discovery:
+        enabled: false
       enabled: false
 #spring:
 #  cloud:

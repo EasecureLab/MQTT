@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class TimeFormatTransUtils {
+    // localDateTime: 必须是UTC时间
     public static Long localDateTime2timeStamp(LocalDateTime localDateTime){
         return localDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
     }

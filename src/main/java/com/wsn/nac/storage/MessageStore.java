@@ -1,12 +1,16 @@
 package com.wsn.nac.storage;
 
+import com.wsn.nac.Util.TimeFormatTransUtils;
 import com.wsn.nac.storage.entity.Sensor;
 import com.wsn.nac.storage.entity.SensorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 /**
  * UTF-8
@@ -47,10 +51,11 @@ public class MessageStore {
         mongoTemplateForDeviceHistory.save(sensor,collectionName);
     }
 
-//    public String findSensorByPosition(int position, int X, int Y) {
-//
-//        return mongoTemplateForDevice.findOne(
-//                new Query(Criteria.where("x").is(X).and("y").is(Y).and("position").is(position)), Sensor.class, "sensorTest").getId();
-//    }
-//    public void readDegree(){}
+    // 移除 time 之前的数据
+    public void removeByCollectionNameAndTime(String collectionName, LocalDateTime time){
+        Long timeLong = TimeFormatTransUtils.localDateTime2timeStamp(time);
+        Query query = new Query(Criteria.where("dateTime").lt(timeLong));
+        mongoTemplateForDeviceHistory.remove(query,collectionName);
+    }
+
 }

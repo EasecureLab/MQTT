@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -67,11 +68,11 @@ public class MqttReceiveCallback implements MqttCallback {
             log.warn("data为空");
             return;
         }
-        // // 变化的数据不做处理，直接返回
-        // if ("change".equals(messageFormat.getType())){
-        //     log.warn("变化数据，不做处理");
-        //     return;
-        // }
+        // 变化的数据不做处理，直接返回
+        if ("change".equals(messageFormat.getType())){
+            log.warn("变化数据，不做处理");
+            return;
+        }
 
         // System.out.println("data:" + messageFormat.getData());
 
@@ -98,7 +99,6 @@ public class MqttReceiveCallback implements MqttCallback {
                         handleSensorData(sensorData);
                     }
                 });
-
             }
         }
     }
@@ -119,30 +119,21 @@ public class MqttReceiveCallback implements MqttCallback {
 
             String[] positionData = sensorData.getId().split("-");
 
-            // System.out.println(Arrays.toString(positionData));
-
             int position = Integer.parseInt(positionData[0]);
             ScreenEnum screen = ScreenEnum.select(position);
-            // int X = Integer.parseInt(positionData[1]);
-            // int Y = Integer.parseInt(positionData[2]);
-            // SensorMessage sensorMessage = new SensorMessage();
-            // sensorMessage.setX(X);
-            // sensorMessage.setY(Y);
-            // sensorMessage.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
-            // sensorMessage.setData(sensorData.getValue());
-            //
-            // log.info("sensorMessageDataBase:" + sensorMessage);
-            // messageStore.storeByCollectionName(sensorMessage, screen.toString() + "Test4");
             Sensor sensor = new Sensor();
             sensor.setDeviceId(sensorData.getId());
             sensor.setDesc(sensorData.getDesc());
             sensor.setData(sensorData.getValue());
-            sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
+            // 注意，这里读取的时间是：本地时间 -> UTC时间
+            // TimeFormatTransUtils.localDateTime2timeStamp 这个工具类只能对UTC时间进行转化，要不然会差8小时
+            sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now(ZoneOffset.UTC)));
             // 1-6-23 位置的数据有问题，直接设置为25
             if (sensor.getDeviceId().equals("1-6-23")){
                 sensor.setData(25);
             }
             messageStore.storeByCollectionName(sensor, screen.toString());
+            messageStore.storeByCollectionName(sensor, screen.toString() + "Backup" );
 
         }else { // 其他传感器
             // log.info("sensorData:" + sensorData);
@@ -150,13 +141,15 @@ public class MqttReceiveCallback implements MqttCallback {
             sensor.setDeviceId(sensorData.getId());
             sensor.setDesc(sensorData.getDesc());
             sensor.setData(sensorData.getValue());
-            sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now()));
+            // 注意，这里读取的时间是：本地时间 -> UTC时间
+            // TimeFormatTransUtils.localDateTime2timeStamp 这个工具类只能对UTC时间进行转化，要不然会差8小时
+            sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now(ZoneOffset.UTC)));
 
             log.info("sensorDataBase:" + sensor);
             messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString());
+            messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString() + "Backup");
         }
         log.info("保存成功");
-
     }
 
 
