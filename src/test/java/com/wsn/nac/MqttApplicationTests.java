@@ -28,8 +28,8 @@ public class MqttApplicationTests {
     public void contextLoads() {
     }
 
-    // @Autowired
-    // ScheduleTask scheduleTask;
+    @Autowired
+    ScheduleTask scheduleTask;
 
     @Autowired
     MessageStore messageStore;
@@ -37,22 +37,24 @@ public class MqttApplicationTests {
     @Resource
     MongoTemplate mongoTemplateForDeviceHistory;
 
-    // @Test
-    // public void test(){
-    //     // scheduleTask.removeHistory();
-    //     LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
-    //     System.out.println(time);
-    //     ZonedDateTime utc = time.atZone(ZoneId.of("UTC"));
-    //     System.out.println(utc);
-    //     long l = utc.toInstant().toEpochMilli();
-    //     System.out.println(l);
-    //
-    //     // System.out.println(time);
-    //     // // time.
-    //     // Long timeLong = TimeFormatTransUtils.localDateTime2timeStamp(time);
-    //     // System.out.println(timeLong);
-    //     // Query query = new Query(Criteria.where("dateTime").lt(timeLong));
-    //     // mongoTemplateForDeviceHistory.remove(query, Sensor.class,"screen1");
-    //
-    // }
+    @Test
+    public void test(){
+        // scheduleTask.removeHistory();
+
+        // // scheduleTask.removeHistory();
+        // LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
+        // System.out.println(time);
+        // ZonedDateTime utc = time.atZone(ZoneId.of("UTC"));
+        // System.out.println(utc);
+        // long l = utc.toInstant().toEpochMilli();
+        // System.out.println(l);
+        //
+        // // System.out.println(time);
+        // // // time.
+        // // Long timeLong = TimeFormatTransUtils.localDateTime2timeStamp(time);
+        // // System.out.println(timeLong);
+        // // Query query = new Query(Criteria.where("dateTime").lt(timeLong));
+        // // mongoTemplateForDeviceHistory.remove(query, Sensor.class,"screen1");
+
+    }
 }
