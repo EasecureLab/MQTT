@@ -36,6 +36,7 @@ spring:
 
 logging:
   file:
-    path: /etc/log
-    name: mqtt.log
+    #    name: /etc/log/mqtt/mqtt.log
+    path: /etc/log/mqtt
+#    name: mqtt.log
 

@@ -68,11 +68,11 @@ public class MqttReceiveCallback implements MqttCallback {
             log.warn("data为空");
             return;
         }
-        // 变化的数据不做处理，直接返回
-        if ("change".equals(messageFormat.getType())){
-            log.warn("变化数据，不做处理");
-            return;
-        }
+        // // 变化的数据不做处理，直接返回
+        // if ("change".equals(messageFormat.getType())){
+        //     log.warn("变化数据，不做处理");
+        //     return;
+        // }
 
         // System.out.println("data:" + messageFormat.getData());
 
