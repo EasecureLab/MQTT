@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * UTF-8
  * Created by czy  Time : 2021/3/3 9:50
@@ -18,8 +20,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MqttMessageStoreRunner implements CommandLineRunner {
 
-    @Autowired
-    MqttReceiveCallback mqttReceive;
+    @Resource
+    MqttReceiveCallback mqttReceiveCallback;
 
     @Override
     public void run(String... args)  {
@@ -28,7 +30,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
         String TOPICS = "sensorData";
         int qos = 0;
         // 测试的时候修改为2，上传服务器的时候注意修改为1
-        String clientId = "sendSensorData1";
+        String clientId = "sendSensorData111";
         String userName = "wsn";
         String passWord = "wsn405407";
         MqttClient client = null;
@@ -51,7 +53,7 @@ public class MqttMessageStoreRunner implements CommandLineRunner {
             // 设置断开后重新连接
             options.setAutomaticReconnect(true);
             // 设置回调函数
-            client.setCallback(mqttReceive);
+            client.setCallback(mqttReceiveCallback);
             client.connect(options);
             System.out.println("连接成功！");
             //订阅消息

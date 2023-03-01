@@ -16,15 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * UTF-8
@@ -37,8 +35,9 @@ import java.util.concurrent.TimeUnit;
 public class MqttReceiveCallback implements MqttCallback {
 
     // 服务器cpu个数为8，核数为1
-    ExecutorService threadPool = new ThreadPoolExecutor(4,
-            9,2L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1000));
+    // 队列长度必须大于600，要不然放不下
+    ExecutorService threadPool = new ThreadPoolExecutor(9,
+            16,2L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1000));
 
     @Autowired
     MessageStore messageStore;
@@ -50,8 +49,11 @@ public class MqttReceiveCallback implements MqttCallback {
         log.error("连接丢失");
     }
 
+
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws JsonProcessingException {
+        long startTime = System.currentTimeMillis();
+
         String message = new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
 
         log.info("订阅的消息内容：");
@@ -68,11 +70,11 @@ public class MqttReceiveCallback implements MqttCallback {
             log.warn("data为空");
             return;
         }
-        // // 变化的数据不做处理，直接返回
-        // if ("change".equals(messageFormat.getType())){
-        //     log.warn("变化数据，不做处理");
-        //     return;
-        // }
+        // 变化的数据不做处理，直接返回
+        if ("change".equals(messageFormat.getType())){
+            log.warn("变化数据，不做处理");
+            return;
+        }
 
         // System.out.println("data:" + messageFormat.getData());
 
@@ -80,6 +82,14 @@ public class MqttReceiveCallback implements MqttCallback {
         // key 为 C1D1,C1D2,C2D1,C3D1...
         // value 为 List<SensorData>,  这里直接解析 List<SensorData> 会报错，先存为Object, 后面再转化为SensorData
         Map<String,List<Object>> readValue = new ObjectMapper().readValue(messageFormat.getData().toString(), Map.class);
+
+        // 方便计时，多线程并发计时
+        int count = 0;
+        for (List<Object> listObject : readValue.values()) {
+            count += listObject.size();
+        }
+        CountDownLatch countDownLatch = new CountDownLatch(count);
+
         // 遍历 map
         for (List<Object> listObject : readValue.values()) {
             // 遍历 List<Object>
@@ -88,20 +98,27 @@ public class MqttReceiveCallback implements MqttCallback {
                 String jsonObject = new ObjectMapper().writeValueAsString(object);
                 SensorData sensorData = new ObjectMapper().readValue(jsonObject, SensorData.class);
                 log.info("sensorData: " + sensorData);
-                // id 为 _io_status 的不做操作
-                if ("_io_status".equals(sensorData.getId())) {
-                    continue;
-                }
                 // 处理SensorData
                 threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
                         handleSensorData(sensorData);
+                        countDownLatch.countDown();
                     }
                 });
+                // handleSensorData(sensorData);
             }
         }
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        log.info("执行时间：{}", System.currentTimeMillis() - startTime);
     }
+
 
     /**
      * @param sensorData:
@@ -111,6 +128,11 @@ public class MqttReceiveCallback implements MqttCallback {
      * @date 2022/8/29 17:05
      */
     public void handleSensorData(SensorData sensorData){
+        // id 为 _io_status 的不做操作
+        if ("_io_status".equals(sensorData.getId())) {
+            return;
+        }
+
         if ("screen-temperature".equals(sensorData.getDesc())){  //大屏温度
             // null开头的不做处理
             if (sensorData.getId().startsWith("null")){
@@ -125,6 +147,7 @@ public class MqttReceiveCallback implements MqttCallback {
             sensor.setDeviceId(sensorData.getId());
             sensor.setDesc(sensorData.getDesc());
             sensor.setData(sensorData.getValue());
+
             // 注意，这里读取的时间是：本地时间 -> UTC时间
             // TimeFormatTransUtils.localDateTime2timeStamp 这个工具类只能对UTC时间进行转化，要不然会差8小时
             sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now(ZoneOffset.UTC)));
@@ -132,6 +155,9 @@ public class MqttReceiveCallback implements MqttCallback {
             if (sensor.getDeviceId().equals("1-6-23")){
                 sensor.setData(25);
             }
+            sensor.set_id(null);
+            // log.info("sensorDataBase:" + sensor);
+
             messageStore.storeByCollectionName(sensor, screen.toString());
             messageStore.storeByCollectionName(sensor, screen.toString() + "Backup" );
 
@@ -144,12 +170,12 @@ public class MqttReceiveCallback implements MqttCallback {
             // 注意，这里读取的时间是：本地时间 -> UTC时间
             // TimeFormatTransUtils.localDateTime2timeStamp 这个工具类只能对UTC时间进行转化，要不然会差8小时
             sensor.setDateTime(TimeFormatTransUtils.localDateTime2timeStamp(LocalDateTime.now(ZoneOffset.UTC)));
-
-            log.info("sensorDataBase:" + sensor);
+            sensor.set_id(null);
+            // log.info("sensorDataBase:" + sensor);
             messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString());
             messageStore.storeByCollectionName(sensor, ScreenEnum.OTHERS.toString() + "Backup");
         }
-        log.info("保存成功");
+        // log.info("保存成功");
     }
 
 

@@ -51,7 +51,8 @@ public class MessageStore {
     }
 
     public void storeByCollectionName(Sensor sensor, String collectionName) {
-        mongoTemplateForDeviceHistory.save(sensor,collectionName);
+        // mongoTemplateForDeviceHistory.save(sensor,collectionName);
+        mongoTemplateForDeviceHistory.insert(sensor,collectionName);
     }
 
     // 移除 time 之前的数据

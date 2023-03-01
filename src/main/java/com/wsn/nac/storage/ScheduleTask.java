@@ -45,8 +45,8 @@ public class ScheduleTask {
      */
     @Scheduled(cron = "0 0 2 * * ?")
     public void removeHistoryBackup(){
-        log.info("移除一周之前的数据");
-        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC).minusWeeks(1);
+        log.info("移除一个月之前的数据");
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC).minusMonths(1);
         for (int i = 0; i <= 3; i++) {
             messageStore.removeByCollectionNameAndTime(ScreenEnum.select(i).toString() + "Backup",time);
         }
