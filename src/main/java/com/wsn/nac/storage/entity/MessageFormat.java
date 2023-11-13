@@ -17,6 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageFormat implements Serializable {
+    private static final long serialVersionUID = 62912491682529941L;
     // type: real 全部数据
     // type: change 变化数据
     // type: desc 设备描述信息,格式为type,sn,info

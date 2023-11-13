@@ -1,21 +1,21 @@
-//package com.wsn.nac.publish.controller;
-//
+package com.wsn.nac.publish.controller;
+
 //import com.wsn.nac.publish.service.UseQuartZControlService;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import io.swagger.v3.oas.annotations.Operation;
-//import lombok.RequiredArgsConstructor;
-//import org.quartz.Scheduler;
-//import org.quartz.SchedulerException;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//
-//@Api(tags = "传感器控制")
-//@RestController
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-//public class StartProgramController {
-//
-//
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@Api(tags = "传感器控制")
+@RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class StartProgramController {
+
+
 //     final private UseQuartZControlService usequartZ;
 //     final private Scheduler scheduler;
 //
@@ -52,10 +52,10 @@
 //        usequartZ.resumeScheduleJob(scheduler);
 //    }
 //
-//    @GetMapping("/check")
-//    @Operation(summary = "这是一个测试连接, 如果有输出,则说明服务正在运行")
-//    public String test() {
-//        return "这是一个测试连接, 如果有输出,则说明服务正在运行";
-//    }
-//
-//}
+    @GetMapping("/check")
+    @Operation(summary = "这是一个测试连接, 如果有输出,则说明服务正在运行")
+    public String test() {
+        return "这是一个测试连接, 如果有输出,则说明服务正在运行";
+    }
+
+}

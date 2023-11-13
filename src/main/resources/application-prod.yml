@@ -40,3 +40,6 @@ logging:
     path: /etc/log/mqtt
 #    name: mqtt.log
 
+# 生产环境关掉swagger
+swagger:
+  enabled: false
